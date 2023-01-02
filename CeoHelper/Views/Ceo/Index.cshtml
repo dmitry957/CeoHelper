@@ -1,0 +1,30 @@
+﻿<h1>ContentGenerator</h1>
+<div>
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Set Ceo description</label>
+        <div class="col-sm-7">
+            <textarea id='text' class="form-control"></textarea>
+        </div>
+    </div>
+
+
+    <div class="col-sm-7 offset-sm-3">
+    </div>
+
+
+    <button class="btn btn-primary" id="submit">Submit</button>
+    <div id="result"></div>
+</div>
+ 
+@section scripts{
+    <script>
+        $(function () {
+            $('#submit').on('click', function (evt) {
+                 evt.preventDefault();
+                $.post('ceo/search?text='+ $('#text').val(), {}, function (data) {
+                    $('#result').text(data.completions[0].text);
+                  });
+            });
+        });
+    </script>
+}
