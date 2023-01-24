@@ -35,7 +35,7 @@ jobs:
         path: website/**
         if-no-files-found: error
         
-  deploy_prod:
+  deploy_staging:
     needs: build
     runs-on: ubuntu-latest
 
@@ -71,9 +71,8 @@ jobs:
        app-settings-json: |
          [
              {
-                 "name": "UI:Index:Header",
-                 "value": "${{ secrets.INDEX_HEADER }}",
-                 "slotSetting": true
+                 "DefaultConnection": "${{ secrets.DefaultConnection }}",
+                 "OPENAI_KEY": "${{ secrets.OPENAI_KEY }}"
              }
          ]
 
