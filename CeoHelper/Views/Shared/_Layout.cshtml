@@ -4,45 +4,127 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CeoHelper</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="~/css/slick.css" />
+    <link rel="stylesheet" href="~/css/magnific-popup.css" />
+    <link rel="stylesheet" href="~/css/plugin.css" />
+    <link rel="stylesheet" href="~/css/animate.css" />
+    <link rel="stylesheet" href="~/css/progress-bar.css" />
+    <link rel="stylesheet" href="~/css/mean-menu.css" />
+    <link rel="stylesheet" href="~/css/default.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+    <link rel="stylesheet" href="~/css/responsive.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CeoHelper.styles.css" asp-append-version="true" />
 </head>
 <body>
+    <!-- preloader -->
+    <div id="preloader">
+        <div class="preloader loader-bars">
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <!-- preloader end  -->
+    <!-- ========= Header Section Starts ============ -->
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CeoHelper</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
+        <div class="header-area">
+            <div class="header-top">
+                <div class="container-fluid header-width">
+                    <div class="row">
+                        <div class="col-xl-3 col-lg-3 pr-lg-0">
+                            <div class="logo header-logo pr-50 pt-35 float-left">
+                                <a asp-area="" asp-controller="Home" asp-action="Index">
+                                    <img src="~/img/logo/logo.png" alt="logo">
+                                </a>
+                            </div>
+
+                        </div>
+                        <div class="col-xl-6 col-lg-7">
+                            <div class="ml-70 main-menu float-left">
+                                <nav id="mobile-menu">
+                                    <ul>
+                                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                                        <li><a asp-area="" asp-controller="Home" asp-action="AboutUs">About</a></li>
+                                        <li><a asp-area="" asp-controller="Home" asp-action="ContactUs">Contact</a></li>
+                                        <li><a asp-area="" asp-controller="Home" asp-action="HowItWorks">How it works</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <div class="mobile-menu"></div>
+                        </div>
+
+                        <div class="col-xs-3 col-lg-2 p-0">
+                            <partial name="_LoginPartial" />
+                        </div>
+                    </div>
                 </div>
             </div>
-        </nav>
+        </div>
+        </div>
     </header>
+    <!-- ========= Header Section Ends ============ -->
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <!-- ===============Footer Section Starts=============== -->
+    <div class="footer-area footer-bg pt-95">
         <div class="container">
-            &copy; 2022 - CeoHelper - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row">
+                <div class="pl-0 col-xl-3 col-lg-4 col-md-6 col-sm-6 pr-0">
+                    <div class="footer-widget">
+                        <div class="section-title pb-25">
+                            <div class="line ml-10"></div>
+                            <h3>Links</h3>
+                        </div>
+                        <ul class="footer-link">
+                            <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="AboutUs">About</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="ContactUs">Contact</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="HowItWorks">How it works</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <div class="sub-footer mt-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="copyright pb-15">
+                            <div class="copyright-text text-center pt-30">
+                                <p class="m-0 text-white">&copy; 2023 - CeoHelper - <a class="text-white" asp-area="" asp-controller="Home" asp-action="AboutUs">About</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ===============Footer Section Ends=============== -->
+
+    <script src="~/js/vendor/modernizr-3.7.1.min.js"></script>
+    <script src="~/js/vendor/jquery.min.js"></script>
+    <script src="~/js/vendor/popper.min.js"></script>
+    <script src="~/js/vendor/bootstrap.min.js"></script>
+    <script src="~/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/js/jquery-mean-menu.min.js"></script>
+    <script src="~/js/waypoint.min.js"></script>
+    <script src="~/js/jquery.counterup.min.js"></script>
+    <script src="~/js/circular-counter.js"></script>
+    <script src="~/js/isotope.min.js"></script>
+    <script src="~/js/slick.min.js"></script>
+    <script src="~/js/plugins.js"></script>
+    <script src="~/js/main.js"></script>
+    <script src="~/js/smooth-scroll.polyfills.min.js"></script>
+    <script>
+        /* Smooth scroll initiated */
+        var scroll = new SmoothScroll('a[href*="#"]');
+    </script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
