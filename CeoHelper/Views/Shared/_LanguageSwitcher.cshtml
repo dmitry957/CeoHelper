@@ -10,7 +10,7 @@
 @{
     var requestCulture = Context.Features.Get<IRequestCultureFeature>();
     var cultureItems = LocOptions.Value.SupportedUICultures
-        .Select(c => new SelectListItem { Value = c.TwoLetterISOLanguageName, Text = c.TwoLetterISOLanguageName.ToUpper() })
+        .Select(c => new SelectListItem { Value = c.Name, Text = c.TwoLetterISOLanguageName.ToUpper() })
         .ToList();
     var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}";
 }
@@ -21,7 +21,7 @@
           method="post" class="form-horizontal" role="form">
         <select name="culture"
                 onchange="this.form.submit();"
-                asp-for="@requestCulture.RequestCulture.UICulture.TwoLetterISOLanguageName" asp-items="cultureItems">
+                asp-for="@requestCulture.RequestCulture.UICulture.Name" asp-items="cultureItems">
         </select>
     </form>
 </div>
