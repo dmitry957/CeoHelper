@@ -1,19 +1,22 @@
-﻿using CeoHelper.Data.Entities;
+﻿using CeoHelper.Data.Data.Entities.Base;
+using CeoHelper.Data.Entities;
 
 namespace CeoHelper.Data.Data.Entities
 {
-    public class Request
+    public class Request : BaseEntity
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public string Body { get; set; } = string.Empty;
 
-        public Guid UserId { get; set; }
+        public long UserId { get; set; }
 
         public ApplicationUser User { get; set; }
 
         public DateTime Date { get; set; }
 
         public int TokensUsed { get; set; }
+
+        public bool IsLiked { get; set; }
     }
 }

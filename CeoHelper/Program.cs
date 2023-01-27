@@ -1,6 +1,7 @@
 using CeoHelper.Data;
 using CeoHelper.Data.Entities;
 using CeoHelper.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Globalization;
+using System.Security.Policy;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,9 +70,21 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+});
+app.UseStatusCodePages(ctx =>
+{
+    if (ctx.HttpContext.Response.StatusCode == 404)
+        ctx.HttpContext.Response.Redirect("/Home/Index");
+
+    return Task.CompletedTask;
+});
+
 app.MapRazorPages();
 
 app.Run();

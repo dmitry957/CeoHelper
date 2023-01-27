@@ -182,6 +182,19 @@ label {
     background: #da072c;
 }
 
+.white-btn,
+.white-btn:hover {
+    font-size: 14px;
+    line-height: 3.575;
+    color: rgb(26, 25, 30);
+    font-weight: 700;
+    text-align: center;
+    display: block;
+    width: 172px;
+    height: 60px;
+    background-color: rgb(255, 255, 255);
+}
+
     .rd-btn:hover,
     .rd-btn:active {
         background-color: #a80523;
@@ -2520,6 +2533,7 @@ ul.sub-language {
     background-color: rgb(255, 255, 255);
 }
 
+
 .join-area-3 {
     background-size: cover;
     background-repeat: no-repeat;
@@ -4186,6 +4200,16 @@ ul.sub-language {
     max-height: 150px;
     border: 1px solid #e0e3e7;
     margin-bottom: 20px;
+}
+
+.modal-body .keywords {
+    min-height: 200px !important;
+    max-height: 200px !important;
+}
+
+.modal-body .personalization {
+    min-height: 100px !important;
+    max-height: 100px !important;
 }
 
 .content-generator-form input {
