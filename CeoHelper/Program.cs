@@ -2,8 +2,12 @@ using CeoHelper.Data;
 using CeoHelper.Data.Entities;
 using CeoHelper.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,13 +23,27 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
 builder.Services.AddRazorPages();
 var _configuration = new ConfigurationBuilder()
     .AddJsonFile($"secrets.{Environment.GetEnvironmentVariable("ASPNETCORE_URLS")}.json", optional: true, reloadOnChange: true)
     .Build();
 builder.Services.AddSingleton(_configuration);
 builder.Services.AddCeoServices();
+builder.Services.AddLocalization(opt =>
+{
+    opt.ResourcesPath = "Resources";
+});
+builder.Services.Configure<RequestLocalizationOptions>(options => {
+    List<CultureInfo> supportedCultures = new List<CultureInfo>
+    {
+        new CultureInfo("en-US"),
+        new CultureInfo("ru-RU")
+    };
+    options.DefaultRequestCulture = new RequestCulture(culture: "en-US", uiCulture: "en-US");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
 
 var app = builder.Build();
 
@@ -43,6 +61,7 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseRequestLocalization();
 
 app.UseRouting();
 

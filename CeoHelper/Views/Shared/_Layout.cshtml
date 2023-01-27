@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using System.Globalization
+@using Microsoft.AspNetCore.Http.Features
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer _localizer;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -45,17 +52,17 @@
                             <div class="ml-70 main-menu float-left">
                                 <nav id="mobile-menu">
                                     <ul>
-                                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                                        <li><a asp-area="" asp-controller="Home" asp-action="AboutUs">About</a></li>
-                                        <li><a asp-area="" asp-controller="Home" asp-action="ContactUs">Contact</a></li>
-                                        <li><a asp-area="" asp-controller="Home" asp-action="HowItWorks">How it works</a></li>
+                                        <li><a asp-area="" asp-controller="Home" asp-action="Index">@_localizer["Home"]</a></li>
+                                        <li><a asp-area="" asp-controller="Home" asp-action="AboutUs">@_localizer["About"]</a></li>
+                                        <li><a asp-area="" asp-controller="Home" asp-action="ContactUs">@_localizer["Contact"]</a></li>
+                                        <li><a asp-area="" asp-controller="Home" asp-action="HowItWorks">@_localizer["HowItWorks"]</a></li>
                                     </ul>
                                 </nav>
                             </div>
                             <div class="mobile-menu"></div>
                         </div>
-
                         <div class="col-xs-3 col-lg-2 p-0">
+                            @await Html.PartialAsync("_LanguageSwitcher")
                             <partial name="_LoginPartial" />
                         </div>
                     </div>
@@ -82,10 +89,10 @@
                             <h3>Links</h3>
                         </div>
                         <ul class="footer-link">
-                            <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                            <li><a asp-area="" asp-controller="Home" asp-action="AboutUs">About</a></li>
-                            <li><a asp-area="" asp-controller="Home" asp-action="ContactUs">Contact</a></li>
-                            <li><a asp-area="" asp-controller="Home" asp-action="HowItWorks">How it works</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="Index">@_localizer["Home"]</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="AboutUs">@_localizer["About"]</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="ContactUs">@_localizer["Contact"]</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="HowItWorks">@_localizer["HowItWorks"]</a></li>
                         </ul>
                     </div>
                 </div>
