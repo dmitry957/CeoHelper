@@ -9,6 +9,6 @@ public class ApplicationUser : IdentityUser<long>
     public DateTime? DeactivationDate { get; set; }
 }
 
-public class AppRole : IdentityRole<Guid>
+public class AppRole : IdentityRole<long>
 {
 }

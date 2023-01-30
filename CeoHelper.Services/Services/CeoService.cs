@@ -42,7 +42,7 @@ public class CeoService : ICeoService
                 {
                     Body = request,
                     UserId = currentUser.Id,
-                    Date = DateTime.UtcNow,
+                    CreationDate = DateTime.UtcNow,
                     TokensUsed  = tokens
                 };
                 await _applicationDbContext.AddAsync(newRequest);
