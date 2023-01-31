@@ -28,13 +28,13 @@
                         <option>Russian</option>
                     </select>
                     <label class="page-form-control-label" for="textSize">Text size in symbols</label>
-                    <input class="form-control" type="number" id="textSize" min="0" onkeypress="isNumberKey(event)" />
+                    <input class="form-control" type="text" id="textSize" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" />
 
                     <label class="page-form-control-label" for="keywords">Keywords</label>
                     <textarea id="keywords" class="form-control keywords" placeholder="put teach keyword per line or separate via coma"></textarea>
 
                     <label class="page-form-control-label" for="keywordsDensity">Keyword density in %</label>
-                    <input class="form-control" type="number" id="keywordsDensity" min="0" onkeypress="isNumberKey(event)" />
+                    <input class="form-control" type="text" id="keywordsDensity" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" />
 
                     <label class="page-form-control-label" for="personalization">Personalization</label>
                     <textarea class="form-control personalization" id="personalization" placeholder="technical details and catchy phrases to sell product"></textarea>
@@ -161,12 +161,5 @@
                 });
             });
         });
-
-        function isNumberKey(evt) {
-            var charCode = (evt.which) ? evt.which : event.keyCode
-            if (charCode > 31 && (charCode < 48 || charCode > 57))
-                return false;
-            return true;
-        }
     </script>
 }
