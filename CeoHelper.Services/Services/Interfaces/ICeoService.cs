@@ -5,6 +5,6 @@ namespace CeoHelper.Services.Services.Interfaces
 {
     public interface ICeoService
     {
-        Task<(CompletionResult completionResult, int availableTokens)> ExecuteOpenAiRequest(SearchRequestModel model);
+        Task<SearchResultModel> ExecuteOpenAiRequest(SearchRequestModel model);
     }
 }

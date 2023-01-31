@@ -18,7 +18,7 @@ public class CeoService : ICeoService
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IRequestRepository _requestRepository;
 
-    public CeoService(OpenAIAPI openAIAPI, 
+    public CeoService(OpenAIAPI openAIAPI,
                       UserManager<ApplicationUser> userManager,
                       IHttpContextAccessor httpContextAccessor,
                       IRequestRepository requestRepository)
@@ -29,7 +29,7 @@ public class CeoService : ICeoService
         _requestRepository = requestRepository;
     }
 
-    public async Task<(CompletionResult completionResult, int availableTokens)> ExecuteOpenAiRequest(SearchRequestModel model)
+    public async Task<SearchResultModel> ExecuteOpenAiRequest(SearchRequestModel model)
     {
         var currentUser = await _userManager.FindByEmailAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
         if (currentUser.Tokens < model.Tokens)
@@ -39,34 +39,37 @@ public class CeoService : ICeoService
 
         try
         {
-            var result = await _openAIAPI.Completions.CreateCompletionAsync(new CompletionRequest(model.Text, temperature: 0, max_tokens: 100));
-            if (result.Completions.Count > 0)
+            SearchResultModel result = new();
+            //var result = await _openAIAPI.Completions.CreateCompletionAsync(new CompletionRequest(model.Text, temperature: 0, max_tokens: 100));
+            //if (result.Completions.Count > 0)
+            //{
+            using var transaction = _requestRepository.BeginTransaction();
+
+            var newRequest = new Request()
             {
-                using var transaction = _requestRepository.BeginTransaction();
+                Body = model.Text,
+                UserId = currentUser.Id,
+                CreationDate = DateTime.UtcNow,
+                TokensUsed = model.Tokens
+            };
+            await _requestRepository.Insert(newRequest);
 
-                var newRequest = new Request()
-                {
-                    Body = model.Text,
-                    UserId = currentUser.Id,
-                    CreationDate = DateTime.UtcNow,
-                    TokensUsed  = model.Tokens
-                };
-                await _requestRepository.Insert(newRequest);
-
-                currentUser.Tokens -= model.Tokens;
-                IdentityResult updateUserResult = await _userManager.UpdateAsync(currentUser);
-                if (!updateUserResult.Succeeded)
-                {
-                    throw new ApplicationException(updateUserResult.ToString());
-                }
-                await transaction.CommitAsync();
-                return (result, currentUser.Tokens);
+            currentUser.Tokens -= model.Tokens;
+            IdentityResult updateUserResult = await _userManager.UpdateAsync(currentUser);
+            if (!updateUserResult.Succeeded)
+            {
+                throw new ApplicationException(updateUserResult.ToString());
             }
+            await transaction.CommitAsync();
+            result.AvailableTokens = currentUser.Tokens;
+            result.RequestId = newRequest.Id;
+            return result;
+            //}
         }
         catch
         {
             throw new ApplicationException("Something went wrong");
         }
-        return (new CompletionResult(), currentUser.Tokens);
+        return new SearchResultModel();
     }
 }

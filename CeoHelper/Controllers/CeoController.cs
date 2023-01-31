@@ -10,18 +10,22 @@ namespace CeoHelper.Controllers
     {
         private readonly ICeoService _ceoService;
         private readonly IRequestService _requestService;
+        private readonly IUserService _userService;
 
         public CeoController(ICeoService ceoService,
-            IRequestService requestService)
+            IRequestService requestService,
+            IUserService userService)
         {
             _ceoService = ceoService;
             _requestService = requestService;
+            _userService = userService;
         }
-         public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index()
         {
             //OpenAIAPI api = new OpenAIAPI(_configuration.GetValue<string>("OPENAI_KEY"), Engine.Davinci);
             // var result = await api.Completions.CreateCompletionAsync(new CompletionRequest("Write article about blockchain", temperature: 0, max_tokens:200));
             //ViewBag.Result = await _ceoService.ExecuteOpenAiRequest("write small article about bitcoin");
+            ViewBag.Tokens = await _userService.GetCurrentUserAvailableTokens();   
             return View();
         }
 
@@ -30,7 +34,7 @@ namespace CeoHelper.Controllers
         {
             //OpenAIAPI api = new OpenAIAPI(_configuration.GetValue<string>("OPENAI_KEY"), Engine.Davinci);
             // var result = await api.Completions.CreateCompletionAsync(new CompletionRequest("Write article about blockchain", temperature: 0, max_tokens:200));
-            var result = await _ceoService.ExecuteOpenAiRequest(model);
+            SearchResultModel result = await _ceoService.ExecuteOpenAiRequest(model);
             return Json(result);
         }
 
@@ -38,14 +42,14 @@ namespace CeoHelper.Controllers
         public async Task<IActionResult> Like([FromQuery] long id)
         {
             await _requestService.Like(id);
-            return View();
+            return Ok();
         }
 
         [HttpGet]
         public async Task<IActionResult> Dislike([FromQuery] long id)
         {
             await _requestService.Dislike(id);
-            return View();
+            return Ok();
         }
     }
 }

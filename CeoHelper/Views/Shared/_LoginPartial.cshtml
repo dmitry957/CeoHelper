@@ -6,7 +6,7 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <div class="contact-info">
-        <p class="contact-info-email"><a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@User.Identity?.Name</a></p>
+        <p class="contact-info-email"><a asp-area="" asp-controller="Ceo" asp-action="Index" title="Open Ceo Helper Form">@User.Identity?.Name</a></p>
     </div>
     <div class="header-button d-none d-xl-block">
         <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
@@ -17,7 +17,7 @@
 else
 {
     <div class="header-button float-right d-none d-xl-block">
-        <a asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Index", "Ceo", new { area = "" })">Login</a>
     </div>
     <div class="header-button d-none d-xl-block">
         <a asp-area="Identity" asp-page="/Account/Register">Register</a>

@@ -8,5 +8,6 @@ namespace CeoHelper.Services.Services.Interfaces
 {
     public interface IUserService
     {
+        Task<int> GetCurrentUserAvailableTokens();
     }
 }

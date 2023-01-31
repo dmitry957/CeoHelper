@@ -8,34 +8,35 @@
                 <div class="col-lg-8 generated-text-container">
                     <textarea id='generatedText' class="form-control generated-text" placeholder="Generated text is displayed here" disabled></textarea>
                     <div class="d-flex justify-content-between w-50">
-                        <button type="button" class="rd-btn">Like</button>
-                        <button type="button" class="rd-btn">Dislike</button>
+                        <button id="likeBtn" type="button" class="rd-btn">Like</button>
+                        <button id="dislikeBtn" type="button" class="rd-btn">Dislike</button>
                     </div>
-                    <p class="content-generator-form-warning mt-15 mb-15">Please click like if generated text words for you or dislike if its a total trash</p>
+                    <p id="contentGeneratorFormWarning" class="content-generator-form-warning mt-15 mb-15">Please click like if generated text words for you or dislike if its a total trash</p>
+                    <input type="hidden" id="requestId" name="requestId" />
                 </div>
                 <div class="col-lg-4 generator-parameters-container">
-                    <p class="available-words">4234 words available</p>
+                    <p class="available-words"><span id="currentUserAvailableTokens">@ViewBag.Tokens</span> words available</p>
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" aria-label="Words available" aria-valuenow="4234" aria-valuemin="0" aria-valuemax="30000"></div>
+                        <div class="progress-bar" role="progressbar" aria-label="Words available" aria-valuenow="@ViewBag.Tokens" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <p class="content-generator-form-warning">
-                        Each user has 30000 available symbols per day. Ping support if you need more
+                        Each user has 100 available symbols per day. Ping support if you need more
                     </p>
-                    <label class="content-generator-form-control-label" for="languageSelector">Choose language</label>
+                    <label class="page-form-control-label" for="languageSelector">Choose language</label>
                     <select class="form-control" id="languageSelector">
                         <option>English</option>
                         <option>Russian</option>
                     </select>
-                    <label class="content-generator-form-control-label" for="textSize">Text size in symbols</label>
+                    <label class="page-form-control-label" for="textSize">Text size in symbols</label>
                     <input class="form-control" type="number" id="textSize" min="0" onkeypress="isNumberKey(event)" />
 
-                    <label class="content-generator-form-control-label" for="keywords">Keywords</label>
+                    <label class="page-form-control-label" for="keywords">Keywords</label>
                     <textarea id="keywords" class="form-control keywords" placeholder="put teach keyword per line or separate via coma"></textarea>
 
-                    <label class="content-generator-form-control-label" for="keywordsDensity">Keyword density in %</label>
+                    <label class="page-form-control-label" for="keywordsDensity">Keyword density in %</label>
                     <input class="form-control" type="number" id="keywordsDensity" min="0" onkeypress="isNumberKey(event)" />
 
-                    <label class="content-generator-form-control-label" for="personalization">Personalization</label>
+                    <label class="page-form-control-label" for="personalization">Personalization</label>
                     <textarea class="form-control personalization" id="personalization" placeholder="technical details and catchy phrases to sell product"></textarea>
                     <button type="button" id="generateContent" class="rd-btn">Generate</button>
                 </div>
@@ -44,31 +45,71 @@
     </div>
 </div>
 
+<partial name="_CeoHelperForm" />
+
 @section scripts{
     <script>
         $(document).ready(function () {
+            updateAvailableTokensProgressBar();
+            if ($('#generatedText').val() === '') {
+                document.getElementById('likeBtn').style.display = 'none';
+                document.getElementById('dislikeBtn').style.display = 'none';
+                document.getElementById('contentGeneratorFormWarning').style.display = 'none';
+            }
+            $("#ceoHelperModal").modal({ backdrop: 'static' });
+        });
+
+        function updateAvailableTokensProgressBar() {
             const progressBar = document.querySelector('.progress-bar[role="progressbar"]');
             let totalSymbols = $(progressBar).attr('aria-valuemax');
             let availableSymbols = $(progressBar).attr('aria-valuenow');
             let percentage = Math.min(Math.max(Math.floor(availableSymbols / totalSymbols * 100), 0), 100);
             progressBar.style.width = percentage + '%';
-            //$("#ceoHelperModal").modal("show");
-        });
+        }
 
         function validateCeoHelperForm() {
-            if ($('#keywords').text() === '') {
-                alert('The field \'Keywords\' can\'t be empty.');
+            if ($('#modal-form-textSize').val() === '' || $('#modal-form-textSize').val() === 0) {
+                document.querySelector(".modal-form-textSize-error").innerHTML = "The field \'Text Size\' is required.";
+                document.querySelector(".modal-form-textSize-error").style.display = "block";
+                event.preventDefault();
+                return false;
+            }
+            if ($('#modal-form-keywords').val() === '') {
+                document.querySelector(".modal-form-keywords-error").innerHTML = "The field \'Keywords\' can\'t be empty.";
+                document.querySelector(".modal-form-keywords-error").style.display = "block";
+                event.preventDefault();
+                return false;
+            }
+            if ($('#modal-form-keywordsDensity').val() === '' || $('#modal-form-keywordsDensity').val() === 0) {
+                document.querySelector(".modal-form-keywordsDensity-error").innerHTML = "The field \'Keyword Density\' is required.";
+                document.querySelector(".modal-form-keywordsDensity-error").style.display = "block";
+                event.preventDefault();
                 return false;
             }
             return true;
         }
 
         $(function () {
-            $('#generateContent').on('click', function (evt) {
+            $('#submitEnteredParams').on('click', function (evt) {
                 evt.preventDefault();
                 if (!validateCeoHelperForm()) return;
+                let language = $('#modal-form-languageSelector').find(":selected").val();
+                $('#languageSelector').val(language).change();
+                let textSize = $('#modal-form-textSize').val();
+                $('#textSize').val(textSize);
+                let keywords = $('#modal-form-keywords').val();
+                $('#keywords').val(keywords);
+                let keywordsDensity = $('#modal-form-keywordsDensity').val();
+                $('#keywordsDensity').val(keywordsDensity);
+                let personalization = $('#modal-form-personalization').val();
+                $('#personalization').val(personalization);
+                $('#ceoHelperModal').hide();
+                $('.modal-backdrop').hide();
+            });
 
-                let keywords = $('#keywords').text();
+            $('#generateContent').on('click', function (evt) {
+                evt.preventDefault();
+                let keywords = $('#keywords').val();
                 let tokens = keywords.split(/[^\s]+/).length - 1;
                 $.ajax({
                     url: "ceo/search",
@@ -76,9 +117,47 @@
                     data: JSON.stringify({ text: keywords, tokens: tokens }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
-                    success: function () {
-                        $('#generatedText').text(data.completions[0].text);
+                    success: function (data) {
+                        //$('#generatedText').text(data.completions[0].text);
+                        //mock generated content from Open AI
+                        $('#generatedText').val('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
+                            'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit ' +
+                            'in voluptate velit esse cillum dolore.');
+                        $('input[name=requestId]:hidden').val(data.requestId);
+                        $('#currentUserAvailableTokens').html(data.availableTokens);
+                        const progressBar = document.querySelector('.progress-bar[role="progressbar"]');
+                        $(progressBar).attr("aria-valuenow", data.availableTokens);
+                        updateAvailableTokensProgressBar();
+                        document.getElementById('likeBtn').style.display = 'block';
+                        document.getElementById('dislikeBtn').style.display = 'block';
+                        document.getElementById('contentGeneratorFormWarning').style.display = 'block';
                     }
+                });
+            });
+
+            $('#likeBtn').on('click', function (evt) {
+                evt.preventDefault();
+                var requestId = $('input[name=requestId]:hidden').val();
+                if (requestId === '' || requestId === undefined) return;
+                $(this).attr('disabled', true);
+                $('#dislikeBtn').attr('disabled', true);
+                $.get("ceo/like?id=" + requestId, function () {
+                    console.log('The result is liked.');
+                    $(this).attr('disabled', false);
+                    $('#dislikeBtn').attr('disabled', false);
+                });
+            });
+
+            $('#dislikeBtn').on('click', function (evt) {
+                evt.preventDefault();
+                var requestId = $('input[name=requestId]:hidden').val();
+                if (requestId === '' || requestId === undefined) return;
+                $(this).attr('disabled', true);
+                $('#likeBtn').attr('disabled', true);
+                $.get("ceo/dislike?id=" + requestId, function () {
+                    console.log('The result is disliked.');
+                    $(this).attr('disabled', false);
+                    $('#likeBtn').attr('disabled', false);
                 });
             });
         });
