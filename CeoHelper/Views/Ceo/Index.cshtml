@@ -4,71 +4,90 @@
 <div class="content-generator-form-area pt-50 pb-50">
     <div class="container">
         <div class="content-generator-form mb-30">
-            <form id="content-generator-form" action="#" method="POST">
-                <div class="row justify-content-between">
-                    <div class="col-lg-8 generated-text-container">
-                        <textarea id='text' class="form-control generated-text" placeholder="Generated text is displayed here" disabled></textarea>
+            <div class="row justify-content-between">
+                <div class="col-lg-8 generated-text-container">
+                    <textarea id='generatedText' class="form-control generated-text" placeholder="Generated text is displayed here" disabled></textarea>
+                    <div class="d-flex justify-content-between w-50">
                         <button type="button" class="rd-btn">Like</button>
                         <button type="button" class="rd-btn">Dislike</button>
-                        <p class="mt-15 mb-15">Please click like if generated text words for you or dislike if its a total trash</p>
                     </div>
-                    <div class="col-lg-4 generator-parameters-container">
-                        <label for="languageSelector">Choose language</label>
-                        <select class="form-control" id="languageSelector">
-                            <option>English</option>
-                            <option>Russian</option>
-                        </select>
-                        <label for="textSize">Text size in symbols</label>
-                        <input class="form-control" type="number" id="textSize" />
-
-                        <label for="keywords">Keywords</label>
-                        <textarea class="form-control  keywords" id="keywords" placeholder="put teach keyword per line or separate via coma"></textarea>
-
-                        <label for="keywordsDensity">Keyword density in %</label>
-                        <input class="form-control" type="number" id="keywordsDensity" />
-
-                        <label for="personalization">Personalization</label>
-                        <textarea class="form-control personalization" id="personalization" placeholder="technical details and catchy phrases to sell product"></textarea>
-                        <button type="submit" id="submit" class="rd-btn">Generate</button>
-                    </div>
+                    <p class="content-generator-form-warning mt-15 mb-15">Please click like if generated text words for you or dislike if its a total trash</p>
                 </div>
-            </form>
+                <div class="col-lg-4 generator-parameters-container">
+                    <p class="available-words">4234 words available</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-label="Words available" aria-valuenow="4234" aria-valuemin="0" aria-valuemax="30000"></div>
+                    </div>
+                    <p class="content-generator-form-warning">
+                        Each user has 30000 available symbols per day. Ping support if you need more
+                    </p>
+                    <label class="content-generator-form-control-label" for="languageSelector">Choose language</label>
+                    <select class="form-control" id="languageSelector">
+                        <option>English</option>
+                        <option>Russian</option>
+                    </select>
+                    <label class="content-generator-form-control-label" for="textSize">Text size in symbols</label>
+                    <input class="form-control" type="number" id="textSize" min="0" onkeypress="isNumberKey(event)" />
+
+                    <label class="content-generator-form-control-label" for="keywords">Keywords</label>
+                    <textarea id="keywords" class="form-control keywords" placeholder="put teach keyword per line or separate via coma"></textarea>
+
+                    <label class="content-generator-form-control-label" for="keywordsDensity">Keyword density in %</label>
+                    <input class="form-control" type="number" id="keywordsDensity" min="0" onkeypress="isNumberKey(event)" />
+
+                    <label class="content-generator-form-control-label" for="personalization">Personalization</label>
+                    <textarea class="form-control personalization" id="personalization" placeholder="technical details and catchy phrases to sell product"></textarea>
+                    <button type="button" id="generateContent" class="rd-btn">Generate</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<partial name="_CeoHelperForm" />
-
-@*<div>
-    <div class="form-group row">
-        <label class="col-sm-3 col-form-label">Set Ceo description</label>
-        <div class="col-sm-7">
-            <textarea id='text' class="form-control" placeholder="Generated text is displayed here"></textarea>
-        </div>
-    </div>
-
-
-    <div class="col-sm-7 offset-sm-3">
-    </div>
-
-
-    <button class="btn btn-primary" id="submit">Submit</button>
-    <div id="result"></div>
-</div>*@
-
 @section scripts{
     <script>
         $(document).ready(function () {
-            $("#ceoHelperModal").modal("show");
+            const progressBar = document.querySelector('.progress-bar[role="progressbar"]');
+            let totalSymbols = $(progressBar).attr('aria-valuemax');
+            let availableSymbols = $(progressBar).attr('aria-valuenow');
+            let percentage = Math.min(Math.max(Math.floor(availableSymbols / totalSymbols * 100), 0), 100);
+            progressBar.style.width = percentage + '%';
+            //$("#ceoHelperModal").modal("show");
         });
 
+        function validateCeoHelperForm() {
+            if ($('#keywords').text() === '') {
+                alert('The field \'Keywords\' can\'t be empty.');
+                return false;
+            }
+            return true;
+        }
+
         $(function () {
-            $('#submit').on('click', function (evt) {
+            $('#generateContent').on('click', function (evt) {
                 evt.preventDefault();
-                $.post('ceo/search?text=' + $('#keywords').val(), {}, function (data) {
-                    $('#text').text(data.completions[0].text);
+                if (!validateCeoHelperForm()) return;
+
+                let keywords = $('#keywords').text();
+                let tokens = keywords.split(/[^\s]+/).length - 1;
+                $.ajax({
+                    url: "ceo/search",
+                    type: "POST",
+                    data: JSON.stringify({ text: keywords, tokens: tokens }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function () {
+                        $('#generatedText').text(data.completions[0].text);
+                    }
                 });
             });
         });
+
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+            return true;
+        }
     </script>
 }

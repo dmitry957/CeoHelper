@@ -1,37 +1,26 @@
 using CeoHelper.Data;
-using CeoHelper.Data.Entities;
 using CeoHelper.Services;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
+using CeoHelper.Shared.Options;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+using System.Configuration;
 using System.Globalization;
-using System.Security.Policy;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration["DefaultConnection"];
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-   // .AddDefaultTokenProviders()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 
 builder.Services.AddControllersWithViews().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
 builder.Services.AddRazorPages();
+
 var _configuration = new ConfigurationBuilder()
     .AddJsonFile($"secrets.{Environment.GetEnvironmentVariable("ASPNETCORE_URLS")}.json", optional: true, reloadOnChange: true)
     .Build();
 builder.Services.AddSingleton(_configuration);
-builder.Services.AddCeoServices();
+builder.Services.ConfigureBusinessLogic(builder.Configuration);
 builder.Services.AddLocalization(opt =>
 {
     opt.ResourcesPath = "Resources";

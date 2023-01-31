@@ -195,12 +195,12 @@ label {
     background-color: rgb(255, 255, 255);
 }
 
-    .rd-btn:hover,
-    .rd-btn:active {
-        background-color: #a80523;
-        color: #fff;
-        border: 2px solid #a80523;
-    }
+.rd-btn:hover,
+.rd-btn:active {
+    background-color: #a80523;
+    color: #fff;
+    border: 2px solid #a80523;
+}
 
 .rd-btn2 {
     border: 2px solid #fff;
@@ -362,7 +362,7 @@ label {
 
 .header-right {
     gap: 20px;
-    padding: 10px 0 0; 
+    padding: 10px 0 0;
 }
 
 /* home 3 slider */
@@ -2684,6 +2684,10 @@ ul.sub-language {
     margin: auto;
 }
 
+.contact-info-email {
+    margin-top: 10px
+}
+
 /* =================== Career Section ================= */
 
 .career-box {
@@ -4177,6 +4181,33 @@ ul.sub-language {
 
 .generator-parameters-container {
     padding-left: 30px;
+}
+
+.content-generator-form-control-label {
+    font-size: 20px;
+    margin-top: 10px;
+    margin-bottom: 2px;
+}
+
+.available-words {
+    font-size: 12px;
+    color: gray;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.content-generator-form-warning {
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 5px;
+}
+
+.progress {
+    height: 0.5rem;
+}
+
+.progress-bar[role="progressbar"] {
+    background-color: #70d40c;
 }
 
 .content-generator-form .generated-text {

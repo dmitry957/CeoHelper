@@ -1,5 +1,4 @@
-﻿<form method="post" asp-action="Index" asp-controller="Home">
-    <div id="ceoHelperModal" class="modal" tabindex="-1" role="dialog">
+﻿    <div id="ceoHelperModal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -19,7 +18,7 @@
                         </div>
                         <div class="form-group">
                             <label for="textSize">Text size in symbols</label>
-                            <input class="form-control" type="number" id="textSize" />
+                            <input class="form-control" type="number" id="textSize" onkeypress="isNumberKey(event)" min="0" />
                         </div>
                         <div class="form-group">
                             <label for="keywords">Keywords</label>
@@ -27,14 +26,14 @@
                         </div>
                         <div class="form-group">
                             <label for="keywordsDensity">Keyword density in %</label>
-                            <input class="form-control" type="number" id="keywordsDensity" />
+                            <input class="form-control" type="number" id="keywordsDensity" onkeypress="isNumberKey(event)" min="0" />
                         </div>
                         <div class="form-group">
                             <label for="personalization">Personalization</label>
                             <textarea class="form-control personalization" id="personalization" placeholder="technical details and catchy phrases to sell product"></textarea>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="rd-btn">Generate</button>
+                            <button type="button" id="generateContent" class="rd-btn">Generate</button>
                             <button type="button" class="white-btn" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -42,4 +41,4 @@
             </div>
         </div>
     </div>
-</form>
+

@@ -1,7 +1,9 @@
 ﻿using CeoHelper.Data;
 using CeoHelper.Data.Data.Entities;
+using CeoHelper.Data.Data.Repositories.Interfaces;
 using CeoHelper.Data.Entities;
-using CeoHelper.Services.Interfaces;
+using CeoHelper.Services.Services.Interfaces;
+using CeoHelper.Shared.Models.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,50 +16,57 @@ public class CeoService : ICeoService
     private readonly OpenAIAPI _openAIAPI;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly ApplicationDbContext _applicationDbContext;
+    private readonly IRequestRepository _requestRepository;
 
-    public CeoService(OpenAIAPI openAIAPI, UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor, ApplicationDbContext applicationDbContext)
+    public CeoService(OpenAIAPI openAIAPI, 
+                      UserManager<ApplicationUser> userManager,
+                      IHttpContextAccessor httpContextAccessor,
+                      IRequestRepository requestRepository)
     {
         _openAIAPI = openAIAPI;
         _userManager = userManager;
         _httpContextAccessor = httpContextAccessor;
-        _applicationDbContext = applicationDbContext;
+        _requestRepository = requestRepository;
     }
-    public async Task<CompletionResult> ExecuteOpenAiRequest(string request, int tokens)
+
+    public async Task<(CompletionResult completionResult, int availableTokens)> ExecuteOpenAiRequest(SearchRequestModel model)
     {
-        var currentUser = await _applicationDbContext.Users.FirstOrDefaultAsync( x => x.Email == _httpContextAccessor.HttpContext.User.Identity.Name);
-        if (currentUser.Tokens < tokens)
+        var currentUser = await _userManager.FindByEmailAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
+        if (currentUser.Tokens < model.Tokens)
         {
             throw new ApplicationException("Not enough tokens");
         }
 
         try
         {
-            var result = await _openAIAPI.Completions.CreateCompletionAsync(new CompletionRequest(request, temperature: 0, max_tokens: 100));
+            var result = await _openAIAPI.Completions.CreateCompletionAsync(new CompletionRequest(model.Text, temperature: 0, max_tokens: 100));
             if (result.Completions.Count > 0)
             {
-                using var transaction = await _applicationDbContext.Database.BeginTransactionAsync();
+                using var transaction = _requestRepository.BeginTransaction();
 
                 var newRequest = new Request()
                 {
-                    Body = request,
+                    Body = model.Text,
                     UserId = currentUser.Id,
                     CreationDate = DateTime.UtcNow,
-                    TokensUsed  = tokens
+                    TokensUsed  = model.Tokens
                 };
-                await _applicationDbContext.AddAsync(newRequest);
+                await _requestRepository.Insert(newRequest);
 
-                currentUser.Tokens -= tokens;
-               
-                await _applicationDbContext.SaveChangesAsync();
+                currentUser.Tokens -= model.Tokens;
+                IdentityResult updateUserResult = await _userManager.UpdateAsync(currentUser);
+                if (!updateUserResult.Succeeded)
+                {
+                    throw new ApplicationException(updateUserResult.ToString());
+                }
                 await transaction.CommitAsync();
-                return result;
+                return (result, currentUser.Tokens);
             }
         }
         catch
         {
             throw new ApplicationException("Something went wrong");
         }
-        return new CompletionResult();
+        return (new CompletionResult(), currentUser.Tokens);
     }
 }

@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CeoHelper.Data\CeoHelper.Data.csproj" />
+    <ProjectReference Include="..\CeoHelper.Shared\CeoHelper.Shared.csproj" />
     <ProjectReference Include="..\OpenAI\OpenAI.csproj" />
   </ItemGroup>
 

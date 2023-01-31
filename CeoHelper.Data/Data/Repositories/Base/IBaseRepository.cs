@@ -1,4 +1,5 @@
 ﻿using CeoHelper.Data.Data.Entities.Base;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,5 +18,6 @@ namespace CeoHelper.Data.Data.Repositories.Base
         Task UpdateRange(IEnumerable<T> entities);
         Task Delete(long id);
         Task DeleteRange(IEnumerable<long> ids);
+        IDbContextTransaction BeginTransaction();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CeoHelper.Data.Data.Entities.Base;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace CeoHelper.Data.Data.Repositories.Base
 {
@@ -86,6 +87,12 @@ namespace CeoHelper.Data.Data.Repositories.Base
             IQueryable<T> entities = _entities.Where(entity => ids.Contains(entity.Id));
             _entities.RemoveRange(entities);
             await _context.SaveChangesAsync();
+        }
+
+        public IDbContextTransaction BeginTransaction()
+        {
+            var transaction = _context.Database.BeginTransaction();
+            return transaction;
         }
     }
 }
