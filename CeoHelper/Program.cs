@@ -18,14 +18,16 @@ builder.Services.AddRazorPages();
 
 var _configuration = new ConfigurationBuilder()
     .AddJsonFile($"secrets.{Environment.GetEnvironmentVariable("ASPNETCORE_URLS")}.json", optional: true, reloadOnChange: true)
+    .AddUserSecrets<Program>()
     .Build();
 builder.Services.AddSingleton(_configuration);
-builder.Services.ConfigureBusinessLogic(builder.Configuration);
+builder.Services.ConfigureBusinessLogic(_configuration);
 builder.Services.AddLocalization(opt =>
 {
     opt.ResourcesPath = "Resources";
 });
-builder.Services.Configure<RequestLocalizationOptions>(options => {
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
     List<CultureInfo> supportedCultures = new List<CultureInfo>
     {
         new CultureInfo("en-US"),
@@ -42,6 +44,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+    builder.Configuration.AddUserSecrets<Program>();
 }
 else
 {

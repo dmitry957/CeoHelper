@@ -24,8 +24,8 @@
                     </p>
                     <label class="page-form-control-label" for="languageSelector">Choose language</label>
                     <select class="form-control" id="languageSelector">
-                        <option>English</option>
-                        <option>Russian</option>
+                            <option value="en-US">English</option>
+                            <option value="ru-RU">Russian</option>
                     </select>
                     <label class="page-form-control-label" for="textSize">Text size in symbols</label>
                     <input class="form-control" type="text" id="textSize" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" />
@@ -109,12 +109,25 @@
 
             $('#generateContent').on('click', function (evt) {
                 evt.preventDefault();
+                let language = $('#languageSelector').find(":selected").val();
+                let textSize = $('#textSize').val();
                 let keywords = $('#keywords').val();
+                let keywordDensity = $('#keywordsDensity').val();
+                let personalization = $('#personalization').val();
                 let tokens = keywords.split(/[^\s]+/).length - 1;
                 $.ajax({
                     url: "ceo/search",
                     type: "POST",
-                    data: JSON.stringify({ text: keywords, tokens: tokens }),
+                    data: JSON.stringify(
+                        {
+                            language: language,
+                            textSize: textSize,
+                            keywords: keywords,
+                            keywordDensity: keywordDensity,
+                            personalization: personalization,
+                            tokens: tokens
+                        }
+                    ),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (data) {

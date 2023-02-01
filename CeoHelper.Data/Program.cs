@@ -1,4 +1,5 @@
-﻿using CeoHelper.Data.Data.Repositories;
+﻿using CeoHelper.Data.Data;
+using CeoHelper.Data.Data.Repositories;
 using CeoHelper.Data.Data.Repositories.Interfaces;
 using CeoHelper.Data.Entities;
 using CeoHelper.Shared.Options;
@@ -15,6 +16,7 @@ namespace CeoHelper.Data
             RegisterDependencies(services);
             AddDbContext(services, configuration);
             AddIdentity(services);
+            DbInitializer.GenerateBaseData(services);
         }
 
         private static void AddDbContext(IServiceCollection services, IConfiguration configuration)

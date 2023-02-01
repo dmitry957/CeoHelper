@@ -2,7 +2,11 @@
 {
     public class SearchRequestModel
     {
-        public string Text { get; set; }
+        public string Language { get; set; } = string.Empty;
+        public int TextSize { get; set; }
+        public string Keywords { get; set; } = string.Empty;
+        public int KeywordDensity { get; set; }
+        public string Personalization { get; set; } = string.Empty;
         public int Tokens { get; set; }
     }
 }
