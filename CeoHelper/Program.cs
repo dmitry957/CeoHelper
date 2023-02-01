@@ -1,6 +1,8 @@
 using CeoHelper.Data;
 using CeoHelper.Services;
 using CeoHelper.Shared.Options;
+using CeoHelper.Web.Validators;
+using CeoHelper.Web.Validators.Interfaces;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +17,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddControllersWithViews().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
 builder.Services.AddRazorPages();
-
+builder.Services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
 var _configuration = new ConfigurationBuilder()
     .AddJsonFile($"secrets.{Environment.GetEnvironmentVariable("ASPNETCORE_URLS")}.json", optional: true, reloadOnChange: true)
     .AddUserSecrets<Program>()
