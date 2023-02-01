@@ -23,6 +23,12 @@ var _configuration = new ConfigurationBuilder()
     .AddUserSecrets<Program>()
     .Build();
 builder.Services.AddSingleton(_configuration);
+var googleOAuthSettings = _configuration.GetSection(nameof(GoogleOAuthSettings));
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = googleOAuthSettings.GetValue<string>(nameof(GoogleOAuthSettings.ClientID));
+    googleOptions.ClientSecret = googleOAuthSettings.GetValue<string>(nameof(GoogleOAuthSettings.ClientSecret));
+});
 builder.Services.ConfigureBusinessLogic(_configuration);
 builder.Services.AddLocalization(opt =>
 {
