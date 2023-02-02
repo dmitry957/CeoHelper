@@ -18,18 +18,18 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddControllersWithViews().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
-var _configuration = new ConfigurationBuilder()
-    .AddJsonFile($"secrets.{Environment.GetEnvironmentVariable("ASPNETCORE_URLS")}.json", optional: true, reloadOnChange: true)
-    .AddUserSecrets<Program>()
-    .Build();
-builder.Services.AddSingleton(_configuration);
-var googleOAuthSettings = _configuration.GetSection(nameof(GoogleOAuthSettings));
+//var _configuration = new ConfigurationBuilder()
+//    .AddJsonFile($"secrets.{Environment.GetEnvironmentVariable("ASPNETCORE_URLS")}.json", optional: true, reloadOnChange: true)
+//    .AddUserSecrets<Program>()
+//    .Build();
+//builder.Services.AddSingleton(_configuration);
+var googleOAuthSettings = builder.Configuration.GetSection(nameof(GoogleOAuthSettings));
 builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 {
     googleOptions.ClientId = googleOAuthSettings.GetValue<string>(nameof(GoogleOAuthSettings.ClientID));
     googleOptions.ClientSecret = googleOAuthSettings.GetValue<string>(nameof(GoogleOAuthSettings.ClientSecret));
 });
-builder.Services.ConfigureBusinessLogic(_configuration);
+builder.Services.ConfigureBusinessLogic(builder.Configuration);
 builder.Services.AddLocalization(opt =>
 {
     opt.ResourcesPath = "Resources";
