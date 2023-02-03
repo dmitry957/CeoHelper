@@ -1,11 +1,12 @@
 ﻿using CeoHelper.Services.Services.Interfaces;
 using CeoHelper.Shared.Models.Request;
+using CeoHelper.Web.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CeoHelper.Controllers
 {
-    [Authorize]
+    [Authorize, AuthenticatedConstraint]
     public class CeoController : Controller
     {
         private readonly ICeoService _ceoService;
@@ -20,6 +21,8 @@ namespace CeoHelper.Controllers
             _requestService = requestService;
             _userService = userService;
         }
+
+        [HttpGet("/")]
         public async Task<IActionResult> Index()
         {
             //OpenAIAPI api = new OpenAIAPI(_configuration.GetValue<string>("OPENAI_KEY"), Engine.Davinci);

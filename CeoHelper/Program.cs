@@ -3,6 +3,7 @@ using CeoHelper.Services;
 using CeoHelper.Shared.Options;
 using CeoHelper.Web.Validators;
 using CeoHelper.Web.Validators.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
@@ -65,9 +66,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRequestLocalization();
 
-app.UseRouting();
-
 app.UseAuthentication();
+app.UseRouting();
 app.UseAuthorization();
 
 
@@ -80,8 +80,8 @@ app.UseEndpoints(endpoints =>
 app.UseStatusCodePages(ctx =>
 {
     if (ctx.HttpContext.Response.StatusCode == 404)
-        ctx.HttpContext.Response.Redirect("/Home/Index");
-
+        ctx.HttpContext.Response.Redirect("/");
+     
     return Task.CompletedTask;
 });
 

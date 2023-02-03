@@ -1,4 +1,6 @@
 ﻿using CeoHelper.Models;
+using CeoHelper.Web.Attributes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
@@ -6,6 +8,7 @@ using System.Diagnostics;
 
 namespace CeoHelper.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -17,20 +20,25 @@ namespace CeoHelper.Controllers
             _localizer = localizer;
         }
 
+        [HttpGet("/")]
         public IActionResult Index()
         {
             return View();
         }
 
+        [HttpGet("/Home/AboutUs")]
         public IActionResult AboutUs()
         {
             return View();
         }
 
+        [HttpGet("/Home/ContactUs")]
         public IActionResult ContactUs()
         {
             return View();
         }
+
+        [HttpGet("/Home/HowItWorks")]
 
         public IActionResult HowItWorks()
         {
