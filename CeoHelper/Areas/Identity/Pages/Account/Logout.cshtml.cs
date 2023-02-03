@@ -30,6 +30,11 @@ namespace CeoHelper.Web.Areas.Identity.Pages.Account
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)
             {
+                string cookieName = "NotFirstTime";
+                if (Request.Cookies.ContainsKey(cookieName))
+                {
+                    Response.Cookies.Delete(cookieName);
+                }
                 return LocalRedirect(returnUrl);
             }
             else

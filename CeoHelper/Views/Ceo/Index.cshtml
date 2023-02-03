@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNetCore.Mvc.Localization
+﻿@model CeoHelper.Shared.Models.Ceo.IndexViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer _localizer;
 
 <div class="content-generator-form-area pt-50 pb-50">
@@ -44,7 +45,10 @@
     </div>
 </div>
 
-<partial name="_CeoHelperForm" />
+@if (Model.IsFirstTime)
+{
+    <partial name="_CeoHelperForm" />
+}
 
 @section scripts{
     <script>
