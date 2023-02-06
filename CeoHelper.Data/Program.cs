@@ -24,7 +24,7 @@ namespace CeoHelper.Data
             var appSettings = configuration.GetSection(nameof(AppSettings));
             var connectionString = appSettings.GetValue<string>(nameof(AppSettings.DbConnectionString));
 
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
+            services.AddDbContext<ApplicationDbContext>(options => options.UseMySQL(
                 connectionString,
                 x =>
                 {
