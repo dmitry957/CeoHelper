@@ -129,7 +129,7 @@ namespace CeoHelper.Web.Areas.Identity.Pages.Account
                 else
                 {
                     var user = CreateUser();
-                    user.Tokens = 100;
+                    user.Tokens = 5000;
 
                     await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                     await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

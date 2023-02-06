@@ -4,7 +4,7 @@ namespace CeoHelper.Data.Entities;
 
 public class ApplicationUser : IdentityUser<long>
 {
-    public int Tokens { get; set; } = 100;
+    public int Tokens { get; set; } = 5000;
     public bool IsDeactivated { get; set; }
     public DateTime? DeactivationDate { get; set; }
 }

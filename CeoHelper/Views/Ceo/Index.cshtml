@@ -18,10 +18,10 @@
                 <div class="col-lg-4 generator-parameters-container">
                     <p class="available-words"><span id="currentUserAvailableTokens">@ViewBag.Tokens</span> words available</p>
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" aria-label="Words available" aria-valuenow="@ViewBag.Tokens" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar" role="progressbar" aria-label="Words available" aria-valuenow="@ViewBag.Tokens" aria-valuemin="0" aria-valuemax="5000"></div>
                     </div>
                     <p class="content-generator-form-warning">
-                        Each user has 100 available symbols per day. Ping support if you need more
+                        Each user has 5000 available symbols per day. Ping support if you need more
                     </p>
                     <label class="page-form-control-label" for="languageSelector">Choose language</label>
                     <select class="form-control" id="languageSelector">
@@ -129,9 +129,7 @@
                         $('#preloader').hide();
                         //$('#generatedText').text(data.completions[0].text);
                         //mock generated content from Open AI
-                        $('#generatedText').val('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
-                            'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit ' +
-                            'in voluptate velit esse cillum dolore.');
+                        $('#generatedText').val(data.generatedContent);
                         $('input[name=requestId]:hidden').val(data.requestId);
                         $('#currentUserAvailableTokens').html(data.availableTokens);
                         const progressBar = document.querySelector('.progress-bar[role="progressbar"]');

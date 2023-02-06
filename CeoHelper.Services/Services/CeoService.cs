@@ -49,36 +49,43 @@ public class CeoService : ICeoService
                 $"keywords must be {model.KeywordDensity}% off all symbols in the text\r\n" +
                 $"keywords must remain as they are, don't change them\r\n" +
                 $"include {model.Personalization}\r\n";
-            var result = await _openAIAPI.Completions.CreateCompletionAsync(new CompletionRequest(payload, temperature: 0, max_tokens: 100));
-            if (result.Completions.Count > 0)
+            //var result = await _openAIAPI.Completions.CreateCompletionAsync(new CompletionRequest(payload, temperature: 0, max_tokens: 5000));
+            //if (result.Completions.Count > 0)
+            //{
+            //mock generated content from Open AI
+            resultModel.GeneratedContent = "Lorem ipsum dolor sit amet, consectetur adipisicing elit,\r\n" +
+                                           "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\r\n" +
+                                           "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut\r\n" +
+                                           "aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit\r\n" +
+                                           "in voluptate velit esse cillum dolore.";
+            using var transaction = _requestRepository.BeginTransaction();
+
+            var newRequest = new Request()
             {
-                using var transaction = _requestRepository.BeginTransaction();
+                Body = model.Keywords,
+                UserId = currentUser.Id,
+                CreationDate = DateTime.UtcNow,
+                TokensUsed = model.Tokens
+            };
+            await _requestRepository.Insert(newRequest);
 
-                var newRequest = new Request()
-                {
-                    Body = model.Keywords,
-                    UserId = currentUser.Id,
-                    CreationDate = DateTime.UtcNow,
-                    TokensUsed = model.Tokens
-                };
-                await _requestRepository.Insert(newRequest);
+            //Choice? choice = result.Completions.FirstOrDefault();
+            //if (choice is not null)
+            //{
+            int tokens = Regex.Matches(resultModel.GeneratedContent, @"[\S]+").Count;
+            currentUser.Tokens -= tokens;
+            //}
 
-                Choice? choice = result.Completions.FirstOrDefault();
-                if (choice is not null)
-                {
-                    int tokens = Regex.Matches(choice.Text, @"[\S]+").Count;
-                    currentUser.Tokens -= tokens;
-                }
-                IdentityResult updateUserResult = await _userManager.UpdateAsync(currentUser);
-                if (!updateUserResult.Succeeded)
-                {
-                    throw new ApplicationException(updateUserResult.ToString());
-                }
-                await transaction.CommitAsync();
-                resultModel.AvailableTokens = currentUser.Tokens;
-                resultModel.RequestId = newRequest.Id;
-                return resultModel;
+            IdentityResult updateUserResult = await _userManager.UpdateAsync(currentUser);
+            if (!updateUserResult.Succeeded)
+            {
+                throw new ApplicationException(updateUserResult.ToString());
             }
+            await transaction.CommitAsync();
+            resultModel.AvailableTokens = currentUser.Tokens;
+            resultModel.RequestId = newRequest.Id;
+            return resultModel;
+            //}
         }
         catch
         {

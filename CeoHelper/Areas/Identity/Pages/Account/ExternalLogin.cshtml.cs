@@ -139,6 +139,7 @@ namespace CeoHelper.Web.Areas.Identity.Pages.Account
                 if (user is null)
                 {
                     user = CreateUser();
+                    user.Tokens = 5000;
 
                     await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                     await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -192,6 +193,7 @@ namespace CeoHelper.Web.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+                user.Tokens = 5000;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
