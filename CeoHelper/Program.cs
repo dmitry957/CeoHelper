@@ -7,14 +7,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System.Configuration;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+Log.Logger = new LoggerConfiguration().Enrich.FromLogContext().WriteTo.File("logs.txt", Serilog.Events.LogEventLevel.Error).CreateLogger();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
 
 builder.Services.AddControllersWithViews().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
 builder.Services.AddRazorPages();
@@ -24,6 +25,7 @@ builder.Services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
 //    .AddUserSecrets<Program>()
 //    .Build();
 //builder.Services.AddSingleton(_configuration);
+builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
 var googleOAuthSettings = builder.Configuration.GetSection(nameof(GoogleOAuthSettings));
 builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 {
