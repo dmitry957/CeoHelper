@@ -319,8 +319,11 @@ label {
     color: #fff !important;
 }
 
-/* pseudo classes */
+.on-modal-show-overflow-hidden {
+    overflow: hidden !important;
+}
 
+/* pseudo classes */
 *::-moz-selection {
     background: #da072c;
     color: #fff;

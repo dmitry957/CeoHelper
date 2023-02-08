@@ -55,7 +55,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
-    builder.Configuration.AddUserSecrets<Program>();
+    //builder.Configuration.AddUserSecrets<Program>();
 }
 else
 {

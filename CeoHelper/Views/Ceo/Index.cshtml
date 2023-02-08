@@ -59,7 +59,10 @@
                 document.getElementById('dislikeBtn').style.display = 'none';
                 document.getElementById('contentGeneratorFormWarning').style.display = 'none';
             }
-            $("#ceoHelperModal").modal({ backdrop: 'static' });
+            if ($("#ceoHelperModal").length) {
+                $("#ceoHelperModal").modal({ backdrop: 'static' });
+                document.body.classList.add('on-modal-show-overflow-hidden');
+            }
         });
 
         function updateAvailableTokensProgressBar() {
@@ -108,6 +111,8 @@
                 $('#personalization').val(personalization);
                 $('#ceoHelperModal').hide();
                 $('.modal-backdrop').hide();
+                document.body.classList.remove('on-modal-show-overflow-hidden');
+                document.body.style.setProperty('padding-right', '0px', 'important');
                 let tokens = keywords.split(/[^\s]+/).length - 1;
                 $('#preloader').show();
                 $.ajax({
