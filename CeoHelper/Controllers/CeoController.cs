@@ -51,10 +51,18 @@ namespace CeoHelper.Controllers
         [HttpPost]
         public async Task<IActionResult> Search([FromBody] SearchRequestModel model)
         {
-            //OpenAIAPI api = new OpenAIAPI(_configuration.GetValue<string>("OPENAI_KEY"), Engine.Davinci);
-            // var result = await api.Completions.CreateCompletionAsync(new CompletionRequest("Write article about blockchain", temperature: 0, max_tokens:200));
-            SearchResultModel result = await _ceoService.ExecuteOpenAiRequest(model);
-            return Json(result);
+            try
+            {
+                //OpenAIAPI api = new OpenAIAPI(_configuration.GetValue<string>("OPENAI_KEY"), Engine.Davinci);
+                // var result = await api.Completions.CreateCompletionAsync(new CompletionRequest("Write article about blockchain", temperature: 0, max_tokens:200));
+                SearchResultModel result = await _ceoService.ExecuteOpenAiRequest(model);
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 500;
+                return Json(ex.Message);
+            }
         }
 
         [HttpGet]
