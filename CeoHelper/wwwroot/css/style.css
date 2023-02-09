@@ -218,6 +218,10 @@ label {
     width: 100px !important;
 }
 
+.alert-danger {
+    text-align: center;
+}
+
 
 .bl-btn,
 .bl-btn:focus {

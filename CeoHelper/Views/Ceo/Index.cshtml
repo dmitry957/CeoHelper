@@ -59,7 +59,7 @@
 <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="alert alert-danger" role="alert">
-          <strong>Error:</strong> <span class="error-text"></span>
+            <span class="error-text"></span>
         </div>
     </div>
 </div>
@@ -205,7 +205,7 @@
                     error: function (error) {
                         $('#preloader').hide();
                         console.log(error);
-                        document.querySelector(".error-text").innerHTML = error.responseText;
+                        document.querySelector(".error-text").innerHTML = error.responseJSON;
                         $("#errorModal").modal('show');
                         setTimeout(function () {
                             $('#errorModal').modal('hide');
