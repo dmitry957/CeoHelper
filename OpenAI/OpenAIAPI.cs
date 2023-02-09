@@ -1,11 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OpenAI_API.Completions;
+using OpenAI_API.Embedding;
+using OpenAI_API.Files;
+using OpenAI_API.Models;
 
 namespace OpenAI_API
 {
@@ -15,27 +11,26 @@ namespace OpenAI_API
 	public class OpenAIAPI
 	{
 		/// <summary>
+		/// Base url for OpenAI
+		/// </summary>
+		public string ApiUrlBase = "https://api.openai.com/v1/";
+		
+		/// <summary>
 		/// The API authentication information to use for API calls
 		/// </summary>
 		public APIAuthentication Auth { get; set; }
 
 		/// <summary>
-		/// Specifies which <see cref="Engine"/>/model to use for API calls
-		/// </summary>
-		public Engine UsingEngine { get; set; } = Engine.Default;
-
-		/// <summary>
 		/// Creates a new entry point to the OpenAPI API, handling auth and allowing access to the various API endpoints
 		/// </summary>
 		/// <param name="apiKeys">The API authentication information to use for API calls, or <see langword="null"/> to attempt to use the <see cref="APIAuthentication.Default"/>, potentially loading from environment vars or from a config file.</param>
-		/// <param name="engine">The <see cref="Engine"/>/model to use for API calls, defaulting to <see cref="Engine.Davinci"/> if not specified.</param>
-		public OpenAIAPI(APIAuthentication apiKeys = null, Engine engine = null)
+		public OpenAIAPI(APIAuthentication apiKeys = null)
 		{
 			this.Auth = apiKeys.ThisOrDefault();
-			this.UsingEngine = engine ?? Engine.Default;
 			Completions = new CompletionEndpoint(this);
-			Engines = new EnginesEndpoint(this);
-			Search = new SearchEndpoint(this);
+			Models = new ModelsEndpoint(this);
+			Files = new FilesEndpoint(this);
+			Embeddings = new EmbeddingEndpoint(this);
 		}
 
 		/// <summary>
@@ -44,16 +39,19 @@ namespace OpenAI_API
 		public CompletionEndpoint Completions { get; }
 
 		/// <summary>
-		/// The API endpoint for querying available Engines/models
+		/// The API lets you transform text into a vector (list) of floating point numbers. The distance between two vectors measures their relatedness. Small distances suggest high relatedness and large distances suggest low relatedness.
 		/// </summary>
-		public EnginesEndpoint Engines { get; }
+		public EmbeddingEndpoint Embeddings { get; }
 
 		/// <summary>
-		/// The API lets you do semantic search over documents. This means that you can provide a query, such as a natural language question or a statement, and find documents that answer the question or are semantically related to the statement. The “documents” can be words, sentences, paragraphs or even longer documents. For example, if you provide documents "White House", "hospital", "school" and query "the president", you’ll get a different similarity score for each document. The higher the similarity score, the more semantically similar the document is to the query (in this example, “White House” will be most similar to “the president”).
+		/// The API endpoint for querying available Engines/models
 		/// </summary>
-		public SearchEndpoint Search { get; }
+		public ModelsEndpoint Models { get; }
 
-
+		/// <summary>
+		/// The API lets you do operations with files. You can upload, delete or retrieve files. Files can be used for fine-tuning, search, etc.
+		/// </summary>
+		public FilesEndpoint Files { get; }
 
 
 

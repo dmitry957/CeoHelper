@@ -4192,6 +4192,10 @@ ul.sub-language {
         display: inline-block
     }
 
+.text-danger {
+    font-size: 14px !important;
+}
+
 .generated-text-container {
     padding-right: 40px;
 }
@@ -4201,7 +4205,7 @@ ul.sub-language {
 }
 
 .page-form-control-label {
-    font-size: 20px;
+    font-size: 14px;
     margin-top: 10px;
     margin-bottom: 2px;
 }

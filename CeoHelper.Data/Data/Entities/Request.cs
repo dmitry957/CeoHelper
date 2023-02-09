@@ -14,5 +14,7 @@ namespace CeoHelper.Data.Data.Entities
         public int TokensUsed { get; set; }
 
         public bool IsLiked { get; set; }
+
+        public string Result { get; set; } = null!;
     }
 }

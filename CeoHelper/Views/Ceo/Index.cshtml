@@ -28,17 +28,28 @@
                         <option value="en-US">English</option>
                         <option value="ru-RU">Russian</option>
                     </select>
-                    <label class="page-form-control-label" for="textSize">Text size in symbols</label>
-                    <input class="form-control" type="text" id="textSize" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" />
-
-                    <label class="page-form-control-label" for="keywords">Keywords</label>
-                    <textarea id="keywords" class="form-control keywords" placeholder="put teach keyword per line or separate via coma"></textarea>
-
-                    <label class="page-form-control-label" for="keywordsDensity">Keyword density in %</label>
-                    <input class="form-control" type="text" id="keywordsDensity" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" />
-
-                    <label class="page-form-control-label" for="personalization">Personalization</label>
-                    <textarea class="form-control personalization" id="personalization" placeholder="technical details and catchy phrases to sell product"></textarea>
+                    <div class="form-group">
+                        <label class="control-label" for="textSize">Text size in symbols</label>
+                        <input class="form-control" type="text" id="textSize" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" />
+                        <span class="text-danger textSize-error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="keywords">Keywords</label>
+                        <textarea class="form-control  keywords" id="keywords" placeholder="put teach keyword per line or separate via coma"></textarea>
+                        <span class="text-danger keywords-error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="keywordsDensity">Keyword density in %</label>
+                        <input class="form-control" type="text" id="keywordsDensity" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" />
+                        <span class="text-danger keywordsDensity-error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="personalization">Personalization</label>
+                        <textarea class="form-control personalization" id="personalization" placeholder="technical details and catchy phrases to sell product"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="submitEnteredParams" class="rd-btn">Generate</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -74,24 +85,28 @@
         }
 
         function validateCeoHelperForm() {
-            if ($('#modal-form-textSize').val() === '' || $('#modal-form-textSize').val() === 0) {
-                document.querySelector(".modal-form-textSize-error").innerHTML = "The field \'Text Size\' is required.";
-                document.querySelector(".modal-form-textSize-error").style.display = "block";
+            if ($('#textSize').val() === '' || $('#textSize').val() === 0) {
+                document.querySelector(".textSize-error").innerHTML = "The field \'Text Size\' is required.";
+                document.querySelector(".textSize-error").style.display = "block";
                 event.preventDefault();
                 return false;
             }
-            if ($('#modal-form-keywords').val() === '') {
-                document.querySelector(".modal-form-keywords-error").innerHTML = "The field \'Keywords\' can\'t be empty.";
-                document.querySelector(".modal-form-keywords-error").style.display = "block";
+            document.querySelector(".textSize-error").style.display = "none";
+            if ($('#keywords').val() === '') {
+                document.querySelector(".keywords-error").innerHTML = "The field \'Keywords\' can\'t be empty.";
+                document.querySelector(".keywords-error").style.display = "block";
                 event.preventDefault();
                 return false;
             }
-            if ($('#modal-form-keywordsDensity').val() === '' || $('#modal-form-keywordsDensity').val() === 0) {
-                document.querySelector(".modal-form-keywordsDensity-error").innerHTML = "The field \'Keyword Density\' is required.";
-                document.querySelector(".modal-form-keywordsDensity-error").style.display = "block";
+            document.querySelector(".keywords-error").style.display = "none";
+
+            if ($('#keywordsDensity').val() === '' || $('#keywordsDensity').val() === 0) {
+                document.querySelector(".keywordsDensity-error").innerHTML = "The field \'Keyword Density\' is required.";
+                document.querySelector(".keywordsDensity-error").style.display = "block";
                 event.preventDefault();
                 return false;
             }
+            document.querySelector(".keywordsDensity-error").style.display = "none";
             return true;
         }
 
@@ -99,21 +114,20 @@
             $('#submitEnteredParams').on('click', function (evt) {
                 evt.preventDefault();
                 if (!validateCeoHelperForm()) return;
-                let language = $('#modal-form-languageSelector').find(":selected").val();
+                let language = $('#languageSelector').find(":selected").val();
                 $('#languageSelector').val(language).change();
-                let textSize = $('#modal-form-textSize').val();
+                let textSize = $('#textSize').val();
                 $('#textSize').val(textSize);
-                let keywords = $('#modal-form-keywords').val();
+                let keywords = $('#keywords').val();
                 $('#keywords').val(keywords);
-                let keywordsDensity = $('#modal-form-keywordsDensity').val();
+                let keywordsDensity = $('#keywordsDensity').val();
                 $('#keywordsDensity').val(keywordsDensity);
-                let personalization = $('#modal-form-personalization').val();
+                let personalization = $('#personalization').val();
                 $('#personalization').val(personalization);
                 $('#ceoHelperModal').hide();
                 $('.modal-backdrop').hide();
                 document.body.classList.remove('on-modal-show-overflow-hidden');
                 document.body.style.setProperty('padding-right', '0px', 'important');
-                let tokens = keywords.split(/[^\s]+/).length - 1;
                 $('#preloader').show();
                 $.ajax({
                     url: "ceo/search",
@@ -125,7 +139,6 @@
                             keywords: keywords,
                             keywordDensity: keywordsDensity,
                             personalization: personalization,
-                            tokens: tokens
                         }
                     ),
                     contentType: "application/json; charset=utf-8",
