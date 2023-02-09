@@ -1,4 +1,7 @@
-﻿<div id="ceoHelperModal" class="modal" tabindex="-1" role="dialog">
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer _localizer;
+
+<div id="ceoHelperModal" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,33 +10,33 @@
             <div class="modal-body">
                 <div class="content-generator-form">
                     <div class="form-group">
-                        <label class="modal-form-control-label" for="languageSelector">Choose language</label>
+                        <label class="modal-form-control-label" for="modal-form-languageSelector">@_localizer["ChooseLanguage"]</label>
                         <select class="form-control" id="modal-form-languageSelector">
-                            <option value="en-US">English</option>
-                            <option value="ru-RU">Russian</option>
+                            <option value="en-US">@_localizer["English"]</option>
+                            <option value="ru-RU">@_localizer["Russian"]</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="modal-form-control-label" for="modal-form-textSize">Text size in symbols</label>
+                        <label class="modal-form-control-label" for="modal-form-textSize">@_localizer["TextSize"]</label>
                         <input class="form-control" type="text" id="modal-form-textSize" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" />
                         <span class="text-danger modal-form-textSize-error"></span>
                     </div>
                     <div class="form-group">
-                        <label class="modal-form-control-label" for="modal-form-keywords">Keywords</label>
-                        <textarea class="form-control  keywords" id="modal-form-keywords" placeholder="put teach keyword per line or separate via coma"></textarea>
+                        <label class="modal-form-control-label" for="modal-form-keywords">@_localizer["Keywords"]</label>
+                        <textarea class="form-control  keywords" id="modal-form-keywords" placeholder="@_localizer["PutTeachKeyword"]"></textarea>
                         <span class="text-danger modal-form-keywords-error"></span>
                     </div>
                     <div class="form-group">
-                        <label class="modal-form-control-label" for="modal-form-keywordsDensity">Keyword density in %</label>
+                        <label class="modal-form-control-label" for="modal-form-keywordsDensity">@_localizer["KeywordDensity"]</label>
                         <input class="form-control" type="text" id="modal-form-keywordsDensity" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" />
                         <span class="text-danger modal-form-keywordsDensity-error"></span>
                     </div>
                     <div class="form-group">
-                        <label class="modal-form-control-label" for="modal-form-personalization">Personalization</label>
-                        <textarea class="form-control personalization" id="modal-form-personalization" placeholder="technical details and catchy phrases to sell product"></textarea>
+                        <label class="modal-form-control-label" for="modal-form-personalization">@_localizer["Personalization"]</label>
+                        <textarea class="form-control personalization" id="modal-form-personalization" placeholder="@_localizer["TechnicalDetails"]"></textarea>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="submitEnteredParams" class="rd-btn">Generate</button>
+                        <button type="button" id="submitEnteredParamsFromModal" class="rd-btn">@_localizer["Generate"]</button>
                     </div>
                 </div>
             </div>
