@@ -56,6 +56,14 @@
     </div>
 </div>
 
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="alert alert-danger" role="alert">
+          <strong>Error:</strong>  Not enough tokens.
+        </div>
+    </div>
+</div>
+
 @if (Model.IsFirstTime)
 {
     <partial name="_CeoHelperForm" />
@@ -196,6 +204,10 @@
                     },
                     error: function (error) {
                         $('#preloader').hide();
+                        $("#errorModal").modal('show');
+                        setTimeout(function () {
+                            $('#errorModal').modal('hide');
+                        }, 2000);
                         console.log(error);
                     }
                 });
