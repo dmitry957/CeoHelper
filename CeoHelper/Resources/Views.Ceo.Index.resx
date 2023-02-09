@@ -141,6 +141,12 @@
   <data name="Keywords" xml:space="preserve">
     <value>Keywords</value>
   </data>
+  <data name="KeywordsDensityError" xml:space="preserve">
+    <value>The field \'Keyword Density\' is required.</value>
+  </data>
+  <data name="KeywordsError" xml:space="preserve">
+    <value>The field \'Keywords\' can\'t be empty.</value>
+  </data>
   <data name="Like" xml:space="preserve">
     <value>Like</value>
   </data>
@@ -161,6 +167,9 @@
   </data>
   <data name="TextSize" xml:space="preserve">
     <value>Text size in symbols</value>
+  </data>
+  <data name="TextSizeError" xml:space="preserve">
+    <value>The field \'Text Size\' is required.</value>
   </data>
   <data name="WordsAvailable" xml:space="preserve">
     <value>words available</value>

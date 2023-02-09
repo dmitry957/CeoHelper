@@ -141,6 +141,12 @@
   <data name="Keywords" xml:space="preserve">
     <value>Ключевые слова</value>
   </data>
+  <data name="KeywordsDensityError" xml:space="preserve">
+    <value>Поле \'Плотность ключевых слов\' не может быть пустым.</value>
+  </data>
+  <data name="KeywordsError" xml:space="preserve">
+    <value>Поле \'Ключевые слова\' не может быть пустым.</value>
+  </data>
   <data name="Like" xml:space="preserve">
     <value>Нравится</value>
   </data>
@@ -161,6 +167,9 @@
   </data>
   <data name="TextSize" xml:space="preserve">
     <value>Размер текста в символах</value>
+  </data>
+  <data name="TextSizeError" xml:space="preserve">
+    <value>Поле \'Размер текста\' не может быть пустым.</value>
   </data>
   <data name="WordsAvailable" xml:space="preserve">
     <value>токенов доступно</value>

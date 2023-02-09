@@ -94,14 +94,14 @@
 
         function validateCeoHelperForm() {
             if ($('#textSize').val() === '' || $('#textSize').val() === 0) {
-                document.querySelector(".textSize-error").innerHTML = "The field \'Text Size\' is required.";
+                document.querySelector(".textSize-error").innerHTML = '@_localizer["TextSizeError"]';
                 document.querySelector(".textSize-error").style.display = "block";
                 event.preventDefault();
                 return false;
             }
             document.querySelector(".textSize-error").style.display = "none";
             if ($('#keywords').val() === '') {
-                document.querySelector(".keywords-error").innerHTML = "The field \'Keywords\' can\'t be empty.";
+                document.querySelector(".keywords-error").innerHTML = '@_localizer["KeywordsError"]';
                 document.querySelector(".keywords-error").style.display = "block";
                 event.preventDefault();
                 return false;
@@ -109,7 +109,7 @@
             document.querySelector(".keywords-error").style.display = "none";
 
             if ($('#keywordsDensity').val() === '' || $('#keywordsDensity').val() === 0) {
-                document.querySelector(".keywordsDensity-error").innerHTML = "The field \'Keyword Density\' is required.";
+                document.querySelector(".keywordsDensity-error").innerHTML = '@_localizer["KeywordsDensityError"]';
                 document.querySelector(".keywordsDensity-error").style.display = "block";
                 event.preventDefault();
                 return false;
@@ -120,14 +120,14 @@
 
         function validateModalParams() {
             if ($('#modal-form-textSize').val() === '' || $('#modal-form-textSize').val() === 0) {
-                document.querySelector(".modal-form-textSize-error").innerHTML = "The field \'Text Size\' is required.";
+                document.querySelector(".modal-form-textSize-error").innerHTML = '@_localizer["TextSizeError"]';
                 document.querySelector(".modal-form-textSize-error").style.display = "block";
                 event.preventDefault();
                 return false;
             }
             document.querySelector(".modal-form-textSize-error").style.display = "none";
             if ($('#modal-form-keywords').val() === '') {
-                document.querySelector(".modal-form-keywords-error").innerHTML = "The field \'Keywords\' can\'t be empty.";
+                document.querySelector(".modal-form-keywords-error").innerHTML = '@_localizer["KeywordsError"]';
                 document.querySelector(".modal-form-keywords-error").style.display = "block";
                 event.preventDefault();
                 return false;
@@ -135,7 +135,7 @@
             document.querySelector(".modal-form-keywords-error").style.display = "none";
 
             if ($('#modal-form-keywordsDensity').val() === '' || $('#modal-form-keywordsDensity').val() === 0) {
-                document.querySelector(".modal-form-keywordsDensity-error").innerHTML = "The field \'Keyword Density\' is required.";
+                document.querySelector(".modal-form-keywordsDensity-error").innerHTML = '@_localizer["KeywordsDensityError"]';
                 document.querySelector(".modal-form-keywordsDensity-error").style.display = "block";
                 event.preventDefault();
                 return false;
