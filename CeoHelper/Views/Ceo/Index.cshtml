@@ -23,33 +23,35 @@
                     <p class="content-generator-form-warning">
                         @_localizer["ContentGeneratorFormWarning"]
                     </p>
-                    <label class="page-form-control-label" for="languageSelector">@_localizer["ChooseLanguage"]</label>
-                    <select class="form-control" id="languageSelector">
-                        <option value="en-US">@_localizer["English"]</option>
-                        <option value="ru-RU">@_localizer["Russian"]</option>
-                    </select>
-                    <div class="form-group">
-                        <label class="control-label" for="textSize">@_localizer["TextSize"]</label>
-                        <input class="form-control" type="text" id="textSize" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" />
-                        <span class="text-danger textSize-error"></span>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label" for="keywords">@_localizer["Keywords"]</label>
-                        <textarea class="form-control  keywords" id="keywords" placeholder="@_localizer["PutTeachKeyword"]"></textarea>
-                        <span class="text-danger keywords-error"></span>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label" for="keywordsDensity">@_localizer["KeywordDensity"]</label>
-                        <input class="form-control" type="text" id="keywordsDensity" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" />
-                        <span class="text-danger keywordsDensity-error"></span>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label" for="personalization">@_localizer["Personalization"]</label>
-                        <textarea class="form-control personalization" id="personalization" placeholder="@_localizer["TechnicalDetails"]"></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="submitEnteredParams" class="rd-btn ceo-helper-page-submit">@_localizer["Generate"]</button>
-                    </div>
+                    <form id="mainCeoHelperForm">
+                        <label class="page-form-control-label" for="language">@_localizer["ChooseLanguage"]</label>
+                        <select class="form-control" id="language" name="language">
+                            <option value="en-US">@_localizer["English"]</option>
+                            <option value="ru-RU">@_localizer["Russian"]</option>
+                        </select>
+                        <div class="form-group">
+                            <label class="control-label" for="textSize">@_localizer["TextSize"]</label>
+                            <input class="form-control" type="text" id="textSize" name="textSize" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" />
+                            <span class="text-danger textSize-error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="keywords">@_localizer["Keywords"]</label>
+                            <textarea class="form-control  keywords" id="keywords" name="keywords" placeholder="@_localizer["PutTeachKeyword"]"></textarea>
+                            <span class="text-danger keywords-error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="keywordDensity">@_localizer["KeywordDensity"]</label>
+                            <input class="form-control" type="text" id="keywordDensity" name="keywordDensity" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" />
+                            <span class="text-danger keywordsDensity-error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="personalization">@_localizer["Personalization"]</label>
+                            <textarea class="form-control personalization" id="personalization" name="personalization" placeholder="@_localizer["TechnicalDetails"]"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" id="submitEnteredParams" class="rd-btn ceo-helper-page-submit">@_localizer["Generate"]</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -92,100 +94,61 @@
             progressBar.style.width = percentage + '%';
         }
 
-        function validateCeoHelperForm() {
-            if ($('#textSize').val() === '' || $('#textSize').val() === 0) {
-                document.querySelector(".textSize-error").innerHTML = '@_localizer["TextSizeError"]';
-                document.querySelector(".textSize-error").style.display = "block";
-                event.preventDefault();
-                return false;
-            }
-            document.querySelector(".textSize-error").style.display = "none";
-            if ($('#keywords').val() === '') {
-                document.querySelector(".keywords-error").innerHTML = '@_localizer["KeywordsError"]';
-                document.querySelector(".keywords-error").style.display = "block";
-                event.preventDefault();
-                return false;
-            }
-            document.querySelector(".keywords-error").style.display = "none";
+        function getFormData(form) {
+            var rawJson = $(form).serializeArray();
+            var model = {};
 
-            if ($('#keywordsDensity').val() === '' || $('#keywordsDensity').val() === 0) {
-                document.querySelector(".keywordsDensity-error").innerHTML = '@_localizer["KeywordsDensityError"]';
-                document.querySelector(".keywordsDensity-error").style.display = "block";
-                event.preventDefault();
-                return false;
-            }
-            document.querySelector(".keywordsDensity-error").style.display = "none";
-            return true;
+            $.map(rawJson, function (n, i) {
+                model[n['name']] = n['value'];
+            });
+
+            return model;
         }
 
-        function validateModalParams() {
-            if ($('#modal-form-textSize').val() === '' || $('#modal-form-textSize').val() === 0) {
-                document.querySelector(".modal-form-textSize-error").innerHTML = '@_localizer["TextSizeError"]';
-                document.querySelector(".modal-form-textSize-error").style.display = "block";
-                event.preventDefault();
-                return false;
+        $('form[id="ceoHelperForm"]').validate({
+            rules: {
+                textSize: 'required',
+                keywords: 'required',
+                keywordDensity: 'required'
+            },
+            messages: {
+                textSize: '@_localizer["TextSizeError"]',
+                keywords: '@_localizer["KeywordsError"]',
+                keywordDensity: '@_localizer["KeywordsDensityError"]'
+            },
+            submitHandler: function (form) {
+                var model = getFormData(form);
+                $('#ceoHelperModal').hide();
+                $('.modal-backdrop').hide();
+                document.body.classList.remove('on-modal-show-overflow-hidden');
+                document.body.style.setProperty('padding-right', '0px', 'important');
+                $('#language').val(model.language).change();
+                $('#textSize').val(model.textSize);
+                $('#keywords').val(model.keywords);
+                $('#keywordDensity').val(model.keywordDensity);
+                $('#personalization').val(model.personalization);
+                $('#mainCeoHelperForm').submit();
             }
-            document.querySelector(".modal-form-textSize-error").style.display = "none";
-            if ($('#modal-form-keywords').val() === '') {
-                document.querySelector(".modal-form-keywords-error").innerHTML = '@_localizer["KeywordsError"]';
-                document.querySelector(".modal-form-keywords-error").style.display = "block";
-                event.preventDefault();
-                return false;
-            }
-            document.querySelector(".modal-form-keywords-error").style.display = "none";
-
-            if ($('#modal-form-keywordsDensity').val() === '' || $('#modal-form-keywordsDensity').val() === 0) {
-                document.querySelector(".modal-form-keywordsDensity-error").innerHTML = '@_localizer["KeywordsDensityError"]';
-                document.querySelector(".modal-form-keywordsDensity-error").style.display = "block";
-                event.preventDefault();
-                return false;
-            }
-            document.querySelector(".modal-form-keywordsDensity-error").style.display = "none";
-            return true;
-        }
-
-        $('#submitEnteredParamsFromModal').on('click', function (evt) {
-            evt.preventDefault();
-            if (!validateModalParams()) return;
-            let language = $('#modal-form-languageSelector').find(":selected").val();
-            $('#languageSelector').val(language).change();
-            let textSize = $('#modal-form-textSize').val();
-            $('#textSize').val(textSize);
-            let keywords = $('#modal-form-keywords').val();
-            $('#keywords').val(keywords);
-            let keywordsDensity = $('#modal-form-keywordsDensity').val();
-            $('#keywordsDensity').val(keywordsDensity);
-            let personalization = $('#modal-form-personalization').val();
-            $('#personalization').val(personalization);
-            $('#ceoHelperModal').hide();
-            $('.modal-backdrop').hide();
-            document.body.classList.remove('on-modal-show-overflow-hidden');
-            document.body.style.setProperty('padding-right', '0px', 'important');
-            $('#submitEnteredParams').click();
         });
 
-        $(function () {
-            $('#submitEnteredParams').on('click', function (evt) {
-                evt.preventDefault();
-                if (!validateCeoHelperForm()) return;
-                let language = $('#languageSelector').find(":selected").val();
-                let textSize = $('#textSize').val();
-                let keywords = $('#keywords').val();
-                let keywordsDensity = $('#keywordsDensity').val();
-                let personalization = $('#personalization').val();
+        $('form[id="mainCeoHelperForm"]').validate({
+            rules: {
+                textSize: 'required',
+                keywords: 'required',
+                keywordDensity: 'required'
+            },
+            messages: {
+                textSize: '@_localizer["TextSizeError"]',
+                keywords: '@_localizer["KeywordsError"]',
+                keywordDensity: '@_localizer["KeywordsDensityError"]'
+            },
+            submitHandler: function (form) {
+                var model = getFormData(form);
                 $('#preloader').show();
                 $.ajax({
                     url: "ceo/search",
                     type: "POST",
-                    data: JSON.stringify(
-                        {
-                            language: language,
-                            textSize: textSize,
-                            keywords: keywords,
-                            keywordDensity: keywordsDensity,
-                            personalization: personalization,
-                        }
-                    ),
+                    data: JSON.stringify(model),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (data) {
@@ -212,46 +175,46 @@
                         }, 2000);
                     }
                 });
-            });
+            }
+        });
 
-            $('#likeBtn').on('click', function (evt) {
-                evt.preventDefault();
-                var requestId = $('input[name=requestId]:hidden').val();
-                if (requestId === '' || requestId === undefined) return;
-                $(this).attr('disabled', true);
-                $('#dislikeBtn').attr('disabled', true);
-                $('#preloader').show();
-                $.ajax({
-                    url: "ceo/like?id=" + requestId,
-                    success: function (data) {
-                        $('#preloader').hide();
-                        console.log('The result is liked.');
-                    },
-                    error: function (error) {
-                        $('#preloader').hide();
-                        console.log(error);
-                    }
-                });
+        $('#likeBtn').on('click', function (evt) {
+            evt.preventDefault();
+            var requestId = $('input[name=requestId]:hidden').val();
+            if (requestId === '' || requestId === undefined) return;
+            $(this).attr('disabled', true);
+            $('#dislikeBtn').attr('disabled', true);
+            $('#preloader').show();
+            $.ajax({
+                url: "ceo/like?id=" + requestId,
+                success: function (data) {
+                    $('#preloader').hide();
+                    console.log('The result is liked.');
+                },
+                error: function (error) {
+                    $('#preloader').hide();
+                    console.log(error);
+                }
             });
+        });
 
-            $('#dislikeBtn').on('click', function (evt) {
-                evt.preventDefault();
-                var requestId = $('input[name=requestId]:hidden').val();
-                if (requestId === '' || requestId === undefined) return;
-                $(this).attr('disabled', true);
-                $('#likeBtn').attr('disabled', true);
-                $('#preloader').show();
-                $.ajax({
-                    url: "ceo/dislike?id=" + requestId,
-                    success: function (data) {
-                        $('#preloader').hide();
-                        console.log('The result is disliked.');
-                    },
-                    error: function (error) {
-                        $('#preloader').hide();
-                        console.log(error);
-                    }
-                });
+        $('#dislikeBtn').on('click', function (evt) {
+            evt.preventDefault();
+            var requestId = $('input[name=requestId]:hidden').val();
+            if (requestId === '' || requestId === undefined) return;
+            $(this).attr('disabled', true);
+            $('#likeBtn').attr('disabled', true);
+            $('#preloader').show();
+            $.ajax({
+                url: "ceo/dislike?id=" + requestId,
+                success: function (data) {
+                    $('#preloader').hide();
+                    console.log('The result is disliked.');
+                },
+                error: function (error) {
+                    $('#preloader').hide();
+                    console.log(error);
+                }
             });
         });
     </script>

@@ -222,6 +222,12 @@ label {
     text-align: center;
 }
 
+.btn-google {
+    background: url('/img/google-signin-button.png');
+    width: 240px !important;
+    height: 59px !important;
+}
+
 
 .bl-btn,
 .bl-btn:focus {
@@ -4198,6 +4204,10 @@ ul.sub-language {
 
 .text-danger {
     font-size: 14px !important;
+}
+
+.error {
+    color: #ff0000;
 }
 
 .generated-text-container {
