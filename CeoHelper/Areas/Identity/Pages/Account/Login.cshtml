@@ -1,8 +1,10 @@
 ﻿@page
 @model LoginModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer _localizer;
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = _localizer["Login"];
 }
 
 <div class="login-form-area pt-90 pb-90">
@@ -15,16 +17,16 @@
         <div class="login-form col-md-4">
             <section>
                 <form id="account" method="post">
-                    <h2>Use a local account to log in.</h2>
+                    <h2>@_localizer["UseLocalAccoutToLogIn"]</h2>
                     <hr />
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-floating">
-                        <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="Email" aria-required="true" />
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="@_localizer["Email"]" aria-required="true" />
                         @*<label asp-for="Input.Email" class="form-label"></label>*@
                         <span asp-validation-for="Input.Email" class="text-danger"></span>
                     </div>
                     <div class="form-floating">
-                        <input asp-for="Input.Password" class="form-control" autocomplete="current-password" placeholder="Password" aria-required="true" />
+                        <input asp-for="Input.Password" class="form-control" autocomplete="current-password" placeholder="@_localizer["Password"]" aria-required="true" />
                         @*<label asp-for="Input.Password" class="form-label"></label>*@
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
@@ -37,17 +39,17 @@
                         </div>
                     </div>
                     <div>
-                        <button id="login-submit" type="submit" class="rd-btn">Log in</button>
+                        <button id="login-submit" type="submit" class="rd-btn">@_localizer["Login"]</button>
                     </div>
                     <div>
                         <p>
-                            <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                            <a id="forgot-password" asp-page="./ForgotPassword">@_localizer["ForgotPassword"]</a>
                         </p>
                         <p>
-                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">@_localizer["RegisterNewUser"]</a>
                         </p>
                         <p>
-                            <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                            <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">@_localizer["ResendEmailConfirmation"]</a>
                         </p>
                     </div>
                 </form>
@@ -55,7 +57,7 @@
         </div>
         <div class="col-md-6 col-md-offset-2">
             <section>
-                <h3>Use another service to log in.</h3>
+                <h3>@_localizer["UseAnotherServiceToLogIn"]</h3>
                 <hr />
                 @{
                     if ((Model.ExternalLogins?.Count ?? 0) == 0)

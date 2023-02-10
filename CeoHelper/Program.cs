@@ -1,14 +1,10 @@
-using CeoHelper.Data;
 using CeoHelper.Services;
 using CeoHelper.Shared.Options;
 using CeoHelper.Web.Validators;
 using CeoHelper.Web.Validators.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.EntityFrameworkCore;
 using Serilog;
-using System.Configuration;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,8 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 Log.Logger = new LoggerConfiguration().Enrich.FromLogContext().WriteTo.File("logs.txt", Serilog.Events.LogEventLevel.Error).CreateLogger();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddControllersWithViews().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
-builder.Services.AddRazorPages();
+builder.Services.AddControllersWithViews().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+    .AddDataAnnotationsLocalization();
+builder.Services.AddRazorPages().AddViewLocalization().AddDataAnnotationsLocalization();
 builder.Services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
 //var _configuration = new ConfigurationBuilder()
 //    .AddJsonFile($"secrets.{Environment.GetEnvironmentVariable("ASPNETCORE_URLS")}.json", optional: true, reloadOnChange: true)
@@ -83,7 +80,7 @@ app.UseStatusCodePages(ctx =>
 {
     if (ctx.HttpContext.Response.StatusCode == 404)
         ctx.HttpContext.Response.Redirect("/");
-     
+
     return Task.CompletedTask;
 });
 
