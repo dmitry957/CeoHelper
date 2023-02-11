@@ -7,5 +7,6 @@ namespace CeoHelper.Data.Data.Repositories.Interfaces
     {
         Task Deactivate(ApplicationUser entity);
         Task Activate(ApplicationUser entity);
+        Task<bool> IsIpInUse(string ip);
     }
 }

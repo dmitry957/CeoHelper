@@ -46,18 +46,18 @@ public class CeoService : ICeoService
         {
             SearchResultModel resultModel = new();
             string payload = GetTemplatedRequest(model);
-            //var result = await _openAIAPI.Completions.CreateCompletionAsync(new CompletionRequest(payload, model: Model.DavinciText,  temperature: 1, max_tokens: model.TextSize));
+            var result = await _openAIAPI.Completions.CreateCompletionAsync(new CompletionRequest(payload, model: Model.DavinciText,  temperature: 1, max_tokens: model.TextSize));
 
-            //if (result.Completions.Count > 0)
-            //{
-            //    resultModel.GeneratedContent = result.Completions.FirstOrDefault().Text;
-            //}
+            if (result.Completions.Count > 0)
+            {
+                resultModel.GeneratedContent = result.Completions.FirstOrDefault()!.Text;
+            }
             //mock generated content from Open AI
-            resultModel.GeneratedContent = "Lorem ipsum dolor sit amet, consectetur adipisicing elit,\r\n" +
-                                           "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\r\n" +
-                                           "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut\r\n" +
-                                           "aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit\r\n" +
-                                           "in voluptate velit esse cillum dolore.";
+            //resultModel.GeneratedContent = "Lorem ipsum dolor sit amet, consectetur adipisicing elit,\r\n" +
+            //                               "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\r\n" +
+            //                               "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut\r\n" +
+            //                               "aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit\r\n" +
+            //                               "in voluptate velit esse cillum dolore.";
 
             using var transaction = _requestRepository.BeginTransaction();
 

@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using CeoHelper.Data.Data.Repositories.Interfaces;
 
 namespace CeoHelper.Web.Areas.Identity.Pages.Account
 {
@@ -29,13 +30,17 @@ namespace CeoHelper.Web.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
+        private readonly IHttpContextAccessor _accessor;
+        private readonly IUserRepository _userRepository;
 
         public ExternalLoginModel(
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             ILogger<ExternalLoginModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IHttpContextAccessor accessor,
+            IUserRepository userRepository)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -43,6 +48,8 @@ namespace CeoHelper.Web.Areas.Identity.Pages.Account
             _emailStore = GetEmailStore();
             _logger = logger;
             _emailSender = emailSender;
+            _accessor = accessor;
+            _userRepository = userRepository;
         }
 
         /// <summary>
@@ -141,6 +148,14 @@ namespace CeoHelper.Web.Areas.Identity.Pages.Account
                     user = CreateUser();
                     user.Tokens = 5000;
 
+                    user.Ip = _accessor.HttpContext.Connection.RemoteIpAddress.ToString();
+
+                    if (await _userRepository.IsIpInUse(user.Ip))
+                    {
+                        ModelState.AddModelError("", "Ip address in use!");
+                        return Page();
+                    }
+
                     await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                     await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
@@ -194,7 +209,13 @@ namespace CeoHelper.Web.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
                 user.Tokens = 5000;
+                user.Ip = _accessor.HttpContext.Connection.RemoteIpAddress.ToString();
 
+                if (await _userRepository.IsIpInUse(user.Ip))
+                {
+                    ModelState.AddModelError("", "Ip address in use!");
+                    return Page();
+                }
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 

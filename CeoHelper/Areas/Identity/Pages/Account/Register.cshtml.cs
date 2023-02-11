@@ -5,6 +5,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
+using CeoHelper.Data.Data.Repositories.Interfaces;
 using CeoHelper.Web.Validators.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -24,6 +25,8 @@ namespace CeoHelper.Web.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly ICaptchaValidator _captchaValidator;
+        private readonly IHttpContextAccessor _accessor;
+        private readonly IUserRepository _userRepository;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -31,7 +34,9 @@ namespace CeoHelper.Web.Areas.Identity.Pages.Account
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            ICaptchaValidator captchaValidator)
+            ICaptchaValidator captchaValidator,
+            IHttpContextAccessor accessor,
+            IUserRepository userRepository)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -40,6 +45,8 @@ namespace CeoHelper.Web.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _captchaValidator = captchaValidator;
+            _accessor = accessor;
+            _userRepository = userRepository;
         }
 
         /// <summary>
@@ -120,6 +127,13 @@ namespace CeoHelper.Web.Areas.Identity.Pages.Account
                 {
                     var user = CreateUser();
                     user.Tokens = 5000;
+                    user.Ip = _accessor.HttpContext.Connection.RemoteIpAddress.ToString();
+
+                    if (await _userRepository.IsIpInUse(user.Ip)) {
+                        ModelState.AddModelError("", "Ip address in use!");
+                        return Page(); 
+                    }
+
 
                     await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                     await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

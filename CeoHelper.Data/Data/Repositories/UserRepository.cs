@@ -28,5 +28,9 @@ namespace CeoHelper.Data.Data.Repositories
             user.DeactivationDate = null;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> IsIpInUse(string ip) {
+            return await _entities.AnyAsync(u => u.Ip == ip);
+        }
     }
 }
