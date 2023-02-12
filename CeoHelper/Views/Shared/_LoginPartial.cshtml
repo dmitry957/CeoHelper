@@ -18,10 +18,10 @@
 }
 else
 {
-    <div class="header-button float-right d-none d-xl-block">
+    <div class="header-button float-right  d-xl-block">
         <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Index", "Ceo", new { area = "" })">@_localizer["Login"]</a>
     </div>
-    <div class="header-button d-none d-xl-block">
+    <div class="header-button  d-xl-block">
         <a asp-area="Identity" asp-page="/Account/Register">@_localizer["Register"]</a>
     </div>
 }
