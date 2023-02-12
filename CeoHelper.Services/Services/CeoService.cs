@@ -98,18 +98,16 @@ public class CeoService : ICeoService
 
     private string GetTemplatedRequest(SearchRequestModel model) {
         if (model.Language.Equals("en-US")) {
-            return $"generate SEO text with the following requirements: " +
-                    $"text size {model.TextSize} symbols " +
-                    $"include keywords: {model.Keywords} " +
-                    $"keywords must be {model.KeywordDensity}% off all symbols in the text " +
-                    $"keywords must remain as they are, don't change them " +
-                    $"include {model.Personalization} ";
+            return $"Generate interesting article: " +
+                    $"1. Text size {model.TextSize} symbols  " +
+                    $"2. Kewords: {model.Keywords}. Use exact keywords, don't change them " +
+                    $"3. Add advantages to the article - {model.Personalization} " +
+                    $"4. Add title to the article with a keyword ";
         }
-        return $"сгенерируй СЕО текст с следующими требованиями: " +
-               $"размер текста {model.TextSize} символов " +
-               $"включая ключевые слова: {model.Keywords} " +
-               $"ключевые слова должны быть {model.KeywordDensity}% от всего текста " +
-               $"ключевые слова должны оставатся как они есть, не меняй их " +
-               $"включая {model.Personalization} ";
+        return $"Сгенерируй интересную статью: " +
+                $"1.Размер текста {model.TextSize} символов " +
+                $"2.Ключевые слова: {model.Keywords}. Используй точно эти слова, не нужно их изменять. " +
+                $"3.Добавь в текст преимущества - {model.Personalization} " +
+                $"4.Добавь в текст заголовок с ключевым словом";
     }
 }
