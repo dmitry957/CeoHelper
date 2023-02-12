@@ -105,11 +105,11 @@ public class CeoService : ICeoService
                     $"keywords must remain as they are, don't change them " +
                     $"include {model.Personalization} ";
         }
-        return $"сгенерируй СЕО текст с следующими требованиями: \r\n" +
-               $"размер текста {model.TextSize} символов\r\n" +
-               $"включая ключевые слова: {model.Keywords}\r\n" +
-               $"ключевые слова должны быть {model.KeywordDensity}% от всего текста\r\n" +
-               $"ключевые слова должны оставатся как они есть, не меняй их\r\n" +
-               $"включая {model.Personalization}\r\n";
+        return $"сгенерируй СЕО текст с следующими требованиями: " +
+               $"размер текста {model.TextSize} символов " +
+               $"включая ключевые слова: {model.Keywords} " +
+               $"ключевые слова должны быть {model.KeywordDensity}% от всего текста " +
+               $"ключевые слова должны оставатся как они есть, не меняй их " +
+               $"включая {model.Personalization} ";
     }
 }
