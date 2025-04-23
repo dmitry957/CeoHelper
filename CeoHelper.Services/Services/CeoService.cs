@@ -46,12 +46,20 @@ public class CeoService : ICeoService
         {
             SearchResultModel resultModel = new();
             string payload = GetTemplatedRequest(model);
-            var result = await _openAIAPI.Completions.CreateCompletionAsync(new CompletionRequest(payload, model: Model.DavinciText,  temperature: 1, max_tokens: model.TextSize));
-
-            if (result.Completions.Count > 0)
+            try
             {
-                resultModel.GeneratedContent = result.Completions.FirstOrDefault()!.Text;
+                var result = await _openAIAPI.Completions.CreateCompletionAsync(new CompletionRequest(payload, model: Model.DavinciText, temperature: 1, max_tokens: model.TextSize));
+
+                if (result.Completions.Count > 0)
+                {
+                    resultModel.GeneratedContent = result.Completions.FirstOrDefault()!.Text;
+                }
             }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
             //mock generated content from Open AI
             //resultModel.GeneratedContent = "Lorem ipsum dolor sit amet, consectetur adipisicing elit,\r\n" +
             //                               "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\r\n" +

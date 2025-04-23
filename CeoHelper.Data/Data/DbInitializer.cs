@@ -9,7 +9,7 @@ namespace CeoHelper.Data.Data
         {
             IServiceProvider serviceProvider = services.BuildServiceProvider();
             ApplicationDbContext context = serviceProvider.GetService<ApplicationDbContext>();
-            context.Database.Migrate();
+            //context.Database.Migrate();
         }
     }
 }
