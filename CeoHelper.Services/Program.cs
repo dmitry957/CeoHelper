@@ -28,7 +28,7 @@ namespace CeoHelper.Services
         {
             var appSettings = configuration.GetSection(nameof(AppSettings));
             var openAIAPIKey = appSettings.GetValue<string>(nameof(AppSettings.OpenAIKey));
-            //services.AddSingleton(x => new OpenAIAPI(openAIAPIKey));
+            services.AddSingleton(x => new OpenAIAPI(openAIAPIKey));
         }
     }
 }

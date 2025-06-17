@@ -19,6 +19,7 @@
 			<TreatAsUsed>true</TreatAsUsed>
 		</PackageReference>
 		<PackageReference Include="MySql.EntityFrameworkCore" Version="6.0.10" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Data\Migrations\" />
